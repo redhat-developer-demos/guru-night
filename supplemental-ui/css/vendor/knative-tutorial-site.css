@@ -1,0 +1,17 @@
+.copybtn {
+  background-color: #cc0000;
+  border: none;
+  color: white;
+  padding: 10px 10px;
+  font-size: 12px;
+  cursor: pointer !important;
+  outline: none;
+  right: 4px;
+  top: 4px;
+  float: right;
+}
+
+/* Darker background on mouse-over */
+.copybtn:hover {
+  background-color: #820000;
+}

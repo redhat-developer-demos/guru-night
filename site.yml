@@ -12,22 +12,25 @@ content:
       branches: HEAD
       start_path: documentation
     - url: /knative-tutorial
-      #branches: workshop/*
+      branches: workshop/*
       start_path: documentation
     - url: /istio-tutorial
-      #branches: workshop/*
+      branches: workshop/*
       start_path: documentation
 asciidoc:
   attributes:
+    title: Summit Guru Night
     istio-tutorial-namespace: $WORKSHOP_USER-istiotutorial
-    knative-tutorial-namespace: $WORKSHOP_USER-knativetutorial
+    tutorial-namespace: $WORKSHOP_USER-knativetutorial
     workshop: true
     ocpurl: https://api.guru.devx.red:6443
     appdomain: apps.guru.devx.red
-    etherpad: https://etherpad.wikimedia.org/p/IstioIstambul
+    etherpad: https://etherpad.wikimedia.org/p/SummitGuruNight
     namespace-suffix: -$WORKSHOP_USER
     workshop-domain: guru.devx.red
     workshop-version: release/0.4
+  extensions:
+    - ./lib/copy-to-clipboard.js
 ui:
   bundle:
     url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
