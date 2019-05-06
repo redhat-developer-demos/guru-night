@@ -41,4 +41,4 @@ dev-site.yml
 .firebase*
 firebase*
 package-lock.json
-userpass
+*userpass

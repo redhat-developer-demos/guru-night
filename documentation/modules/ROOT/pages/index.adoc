@@ -1,6 +1,36 @@
 = Summit Guru Night
 
-<<ADD Some  Content here >>
+== User Info 
+
+There are two clusters for this workshop 
+
+=== Cluster I
+
+For users with username `dev001` to `dev175` 
+
+You can access the OpenShift console via https://console-openshift-console.apps.guru.devx.red
+
+To login via cli 
+
+[source,bash]
+----
+oc login -u <username> https://api.guru.devx.red:6443
+----
+
+=== Cluster II
+
+For users with username `dev200` to `dev400` 
+
+You can access the OpenShift console via https://console-openshift-console.apps.cluster-495d.sandbox213.opentlc.com/
+
+To login via cli 
+
+[source,bash]
+----
+oc login -u <username> https://api.cluster-495d.sandbox213.opentlc.com:6443
+----
+
+NOTE: Please ask the instructor for the user password
 
 
 == Workshops 
