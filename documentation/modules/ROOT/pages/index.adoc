@@ -10,7 +10,7 @@ For users with username `dev001` to `dev175`
 
 You can access the OpenShift console via https://console-openshift-console.apps.guru.devx.red
 
-To login via cli 
+To login via cli use https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/[OpenShift4 client]:
 
 [source,bash]
 ----
