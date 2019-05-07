@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: Summit Guru Night
-  url: https://summit-guru-night.dex.red
+  url: https://summit-guru-night.devx.red
   start_page: summit-guru-night::index.adoc
 
 content:
