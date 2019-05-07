@@ -11,9 +11,13 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install @antora/cli@2.0 @antora/site-generator-default@2.0
+    npm install -g @antora/cli@2.0 -g @antora/site-generator-default@2.0 firebase-tools
   displayName: 'Install Antora'
 
 - script: |
     antora site.yml --stacktrace
   displayName: 'Generate Site'
+
+- script: |
+    firebase deploy --token $firebaseDeployKey --project firebaseProject
+  displayName: 'Deply to firebase hosting'
