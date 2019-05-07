@@ -19,5 +19,6 @@ steps:
   displayName: 'Generate Site'
 
 - script: |
-    firebase deploy --token $firebaseDeployKey --project firebaseProject
+    firebase use $firebaseProject --token $firebaseDeployKey
+    firebase deploy --token $firebaseDeployKey --only hosting -m "CI Build"
   displayName: 'Deply to firebase hosting'
