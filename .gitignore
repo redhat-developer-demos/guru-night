@@ -39,6 +39,5 @@ package.json
 dev-site.yml
 
 .firebase*
-firebase*
 package-lock.json
 *userpass
