@@ -20,5 +20,5 @@ steps:
 
 - script: |
     firebase use "$(firebaseProject)" --token "$(firebaseToken)"
-    firebase deploy --token "$(firebaseToken)" --only hosting -m "CI Build"
+    firebase deploy --token "$(firebaseToken)" --only hosting -m "CI Build for $(Build.SourceVersionMessage)"
   displayName: 'Deploy Site'
