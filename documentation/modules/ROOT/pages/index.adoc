@@ -47,4 +47,4 @@ oc auth can-i get configmaps -n knative-serving
 
 - link:/istio-tutorial/1.1.x/index.html[Istio]
 - link:/knative-tutorial/v0.4.0/index.html[Knative]
-- link:/eda-tutorial/workshop/index.html[EDA]
+- link:/eda-tutorial/1.0/index.html[EDA]
