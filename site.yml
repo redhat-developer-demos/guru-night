@@ -11,6 +11,9 @@ content:
     - url: https://github.com/redhat-developer-demos/guru-night
       branches: master
       start_path: documentation
+    - url: https://github.com/redhat-developer-demos/eda-tutorial
+      branches: master
+      start_path: documentation
     - url: https://github.com/redhat-developer-demos/knative-tutorial
       branches: workshop/0.4
       start_path: documentation
