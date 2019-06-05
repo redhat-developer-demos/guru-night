@@ -1,0 +1,53 @@
+= {title}
+:numbered!:
+
+== User Info 
+
+There are two clusters for this workshop 
+
+=== Cluster I - Istio Workshop
+
+For users with username `user1` to `user50` 
+
+You can access the {master-urls[0]}[OpenShift console]
+
+To login via cli use https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/[OpenShift4 client]:
+
+To login via cli 
+
+[source,bash,subs="attributes+,+macros"]
+----
+oc login -u <username> {ocpurl[0]}
+----
+
+NOTE: Please ask the instructor for the user password
+
+=== Cluster II - Serverless Workshop
+
+For users with username `user1` to `user50` 
+
+You can access the OpenShift console via https://console-openshift-console.apps.guru.devx.red
+
+To login via cli use https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/[OpenShift4 client]:
+
+[source,bash]
+----
+oc login -u <username> https://api.guru.devx.red:6443
+----
+
+== Pre-Checks
+
+To see if you have the needed role(s) to do:
+
+* Get **configmaps** from the OpenShift Project **knative-serving**, run the command:
+   
+[source,bash]
+----
+oc auth can-i get configmaps -n knative-serving
+----
+
+== Workshops 
+
+- link:/istio-tutorial/1.1.x/index.html[Istio]
+- link:/knative-tutorial/v0.4.0/index.html[Knative]
+- link:/eda-tutorial/1.0/index.html[EDA]

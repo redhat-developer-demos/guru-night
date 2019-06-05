@@ -5,5 +5,5 @@ metadata:
   name: workshop-student
 rules:
   - apiGroups: [""]
-    resources: ["configmaps"]
+    resources: ["configmaps","services"]
     verbs: ["get", "view"]

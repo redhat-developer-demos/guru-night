@@ -1,0 +1,19 @@
+{
+  "name": "guru-night",
+  "version": "0.0.1",
+  "description": "The Guru workshop setup scripts",
+  "main": "bin/setup.js",
+  "repository": "git@github.com:redhat-developer-demos/guru-night.git",
+  "author": "Kamesh Sampath <kamesh.sampath@hotmail.com>",
+  "license": "ASL-v2",
+  "devDependencies": {
+    "lodash": "^4.17.11",
+    "shelljs": "^0.8.3",
+    "yargs": "^13.2.4",
+    "@antora/cli": "2.0.0",
+    "@antora/site-generator-default": "2.0.0",
+    "gulp": "3.9.1",
+    "gulp-connect": "5.6.1",
+    "yaml-js": "^0.2.3"
+  }
+}

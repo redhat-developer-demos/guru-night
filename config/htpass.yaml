@@ -1,0 +1,7 @@
+spec.identityProviders[+]: 
+  name: htpassidp
+  type: HTPasswd
+  mappingMethod: claim 
+  htpasswd:
+    fileData:
+      name: htpass-secret

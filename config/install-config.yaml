@@ -1,0 +1,41 @@
+apiVersion: v1
+baseDomain: devx.red
+compute:
+- hyperthreading: Enabled
+  name: worker
+  platform: 
+     aws:
+       type: m5.4xlarge
+       zones:
+         - ap-south-1a
+         - ap-south-1b
+       rootVolume:
+          size: 500
+          type: gp2
+  replicas: 3
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  platform: 
+     aws:
+       type: c5.4xlarge
+       zones:
+         - ap-south-1a
+         - ap-south-1b
+  replicas: 3
+metadata:
+  name: guru
+networking:
+  clusterNetwork:
+  - cidr: 10.128.0.0/14
+    hostPrefix: 23
+  machineCIDR: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - 172.30.0.0/16
+platform:
+  aws:
+    region: ap-south-1
+# update these to match your environment 
+# pullSecret: 
+# sshKey: |

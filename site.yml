@@ -11,24 +11,27 @@ content:
     - url: https://github.com/redhat-developer-demos/guru-night
       branches: master
       start_path: documentation
-    - url: https://github.com/redhat-developer-demos/eda-tutorial
-      branches: master
-      start_path: documentation
-    - url: https://github.com/redhat-developer-demos/knative-tutorial
-      branches: workshop/0.4
-      start_path: documentation
     - url: https://github.com/redhat-developer-demos/istio-tutorial
-      branches: workshop/1.1.x
+      branches:  workshop/sin-052019
       start_path: documentation
+    - url: https://github.com/redhat-developer-demos/knative-tutorial-module-basics
+      branches: workshop/0.5
+      start_path: documentation
+
 asciidoc:
   attributes:
     title: Summit Guru Night
     istio-tutorial-namespace: $WORKSHOP_USER-istiotutorial
     tutorial-namespace: $WORKSHOP_USER-knativetutorial
     workshop: true
-    ocpurl: https://api.guru.devx.red:6443
+    ocpurl:
+       - https://api.guru.devx.red:6443
+       - https://example.com
+    master-urls:
+      - http://example.com
+      - ttp://example.org
     appdomain: apps.guru.devx.red
-    etherpad: https://etherpad.wikimedia.org/p/SummitGuruNight
+    etherpad: https://etherpad.wikimedia.org/p/DevOpsCon
     namespace-suffix: -$WORKSHOP_USER
     workshop-domain: guru.devx.red
     workshop-version: release/0.4
@@ -36,8 +39,7 @@ asciidoc:
     - ./lib/copy-to-clipboard.js
 ui:
   bundle:
-    url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
-    snapshot: true
+    url: https://github.com/redhat-developer-demos/rhd-tutorial-ui/releases/download/v0.0.3/ui-bundle.zip
   supplemental_files: ./supplemental-ui
 output:
   dir: ./gh-pages

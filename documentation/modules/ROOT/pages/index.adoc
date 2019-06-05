@@ -1,50 +1,18 @@
-= Summit Guru Night
+= {title}
+:page-layout: home
+:!sectids:
+:!numbered:
 
-== User Info 
+[.tiles.browse]
+== Servicemesh and Serverless
 
-There are two clusters for this workshop 
+[.tile]
+.xref:knative-tutorial-basics:ROOT:index.adoc[Servicemesh with Istio]
+* xref:istio-tutorial:workshop:1setup.adoc[Setup]
+* xref:istio-tutorial:workshop:2deploy-microservices.adoc[Deploy Microservices]
 
-=== Cluster I
+[.tile]
+.xref:knative-tutorial-basics:ROOT:index.adoc[Serverless with Knative]
+* xref:knative-tutorial-basics:ROOT:01-setup.adoc[Setup]
+* xref:knative-tutorial-basics:ROOT:02-basic-fundas.adoc[Basics and Fundamentals]
 
-For users with username `dev001` to `dev175` 
-
-You can access the OpenShift console via https://console-openshift-console.apps.guru.devx.red
-
-To login via cli use https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/[OpenShift4 client]:
-
-[source,bash]
-----
-oc login -u <username> https://api.guru.devx.red:6443
-----
-
-=== Cluster II
-
-For users with username `dev200` to `dev400` 
-
-You can access the OpenShift console via https://console-openshift-console.apps.cluster-495d.sandbox213.opentlc.com/
-
-To login via cli 
-
-[source,bash]
-----
-oc login -u <username> https://api.cluster-495d.sandbox213.opentlc.com:6443
-----
-
-NOTE: Please ask the instructor for the user password
-
-== Pre-Checks
-
-To see if you have the needed role(s) to do:
-
-* Get **configmaps** from the OpenShift Project **knative-serving**, run the command:
-   
-[source,bash]
-----
-oc auth can-i get configmaps -n knative-serving
-----
-
-== Workshops 
-
-- link:/istio-tutorial/1.1.x/index.html[Istio]
-- link:/knative-tutorial/v0.4.0/index.html[Knative]
-- link:/eda-tutorial/1.0/index.html[EDA]

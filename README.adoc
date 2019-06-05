@@ -1,7 +1,22 @@
-= Summit Guru Night
+= Red Hat Developers Workshop Guide
 
-The Workshop documentation site for the Summit Guru Night
-
-The documentation is available at https://summit-guru-night.devx.red
+How to setup the workshop using OpenShift4 
   
+== Pre-req
 
+Assumes you have running OpenShift4 cluster and has the following details with you 
+
+- `kubeconfig` file from the OCP4 install
+
+OpenShift4 CLI for your environment from https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/.
+
+[IMPORTANT]
+====
+If you not have OCP4 cluster then please proceed to https://try.openshift.com[try.openshift.com] to get one installed and configured before proceeding to next section.
+====
+
+== Setup Workshop
+
+```
+node setup.js -k /Users/home/foo/kubeconfig -a 'fooPassword'
+```
