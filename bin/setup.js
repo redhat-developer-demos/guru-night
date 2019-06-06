@@ -104,7 +104,7 @@ console.log(
 
 if (argv.c) {
   //check if the default cluster admin password is present.
-  if (argv.a) {
+  if (!argv.a) {
     console.log(
       "Default password for cluster admin is required run setup.js --help"
     );

@@ -18,7 +18,7 @@ j=$USERS_TO
 while [[ $i -le $j ]];
 do
   yq w -i $CONFIGS_DIR/workshop-students-group.yaml \
-    "users[+]" $(printf "$USER_SUFFIX$i%d" $i)
+    "users[+]" $(printf "$USER_SUFFIX%d" $i)
   ((i++))
 done
 
