@@ -6,7 +6,7 @@ var _ = require("lodash");
 const fs = require("fs");
 
 var argv = opts
-  .usage("Usage: $0 --users='1..10' --project-names='one,two'")
+  .usage("Usage: $0 --users='1..10' --admin-password 'password' --project-names='one,two'")
   .option("kube-config-file", {
     alias: "k",
     description: "kubeconfig file location"

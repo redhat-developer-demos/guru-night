@@ -17,16 +17,14 @@ do
     printf "Deleting OpenShift Project $openshiftProject \n"
     oc adm policy remove-scc-from-user privileged -z default -n "$openshiftProject" && \
     oc adm policy remove-scc-from-user anyuid -z default -n  "$openshiftProject" && \
-    oc adm policy remove-role-from-user admin "$openshiftUser" -n  "$openshiftProject"&& \
-    oc adm policy remove-role-from-user workshop-student-project "$openshiftUser" --role-namespace="$openshiftProject" -n "$openshiftProject"
+    oc adm policy remove-role-from-user admin "$openshiftUser" -n "$openshiftProject" && \
+    oc policy remove-role-from-user view "$openshiftUser" -n "istio-system" && \
+    oc policy remove-role-from-user workshop-student-project "$openshiftUser" --role-namespace="$openshiftProject" -n "$openshiftProject"
     oc delete -f $CONFIGS_DIR/workshop-student-project-role.yaml -n "$openshiftProject" && \
     oc delete project --ignore-not-found=true "$openshiftProject"
   done
   ((i++))
 done
-
-# remove istio view role on istio-system
-oc adm policy remove-cluster-role-from-group view workshop-students -n istio-system
 
 # Delete the workshop students group 
 oc delete groups.user.openshift.io workshop-students

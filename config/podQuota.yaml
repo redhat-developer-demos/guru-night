@@ -4,4 +4,4 @@ metadata:
   name: workshop-pod-quota
 spec:
   hard:
-    pods: "6"
+    pods: "8"
