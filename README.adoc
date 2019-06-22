@@ -2,13 +2,37 @@
 
 How to setup the workshop using OpenShift4 
   
-== Pre-req
+== OCP4 Setup
 
-Assumes you have running OpenShift4 cluster and has the following details with you 
+Create a OCP4 cluster by visiting try.openshift.com
 
-- `kubeconfig` file from the OCP4 install
+1) ./openshift-install --dir=june22v2 create install-config
 
-OpenShift4 CLI for your environment from https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/.
+This creates a directory called "june22v2" and inside it a file called install-config.yaml
+
+2) Edit this file to override your AWS Instance Types, here is an example snippet
+
+----
+  name: worker
+  platform: 
+     aws:
+       type: m5.4xlarge
+
+  name: master
+  platform: 
+     aws:
+       type: c5.4xlarge
+----
+
+3) ./openshift-install --dir=june22v2 create cluster
+
+4) You can monitoring the activity by refreshing your AWS EC2 console
+
+5) Make note of the resulting URLs and the kubeadmin password when the process is completed.  It will take several minutes, go have lunch.
+
+6) Also keep the kubeconfig file in june22v2/auth
+
+7) OpenShift4 CLI for your environment from https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/.
 
 [IMPORTANT]
 ====
