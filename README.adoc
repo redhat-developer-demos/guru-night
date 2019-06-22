@@ -4,13 +4,13 @@ How to setup the workshop using OpenShift4
   
 == OCP4 Setup
 
-Create a OCP4 cluster by visiting try.openshift.com
+Create a OCP4 cluster by visiting try.openshift.com and downloading the openshift installer binary for Linux or Mac
 
 1) ./openshift-install --dir=june22v2 create install-config
 
-This creates a directory called "june22v2" and inside it a file called install-config.yaml
+Follow the prompts for your SSH key, your favorite AWS Region, your Route53 domain, your PullSecret (visible at try.openshift.com), etc. This creates a directory called "june22v2" and inside it a file called install-config.yaml
 
-2) Edit this file to override your AWS Instance Types, here is an example snippet
+2) Edit this file to override your AWS Instance Types (the default ones are tiny), here is an example snippet
 
 ----
   name: worker
@@ -34,10 +34,6 @@ This creates a directory called "june22v2" and inside it a file called install-c
 
 7) OpenShift4 CLI for your environment from https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/.
 
-[IMPORTANT]
-====
-If you not have OCP4 cluster then please proceed to https://try.openshift.com[try.openshift.com] to get one installed and configured before proceeding to next section.
-====
 
 == Setup Workshop
 
