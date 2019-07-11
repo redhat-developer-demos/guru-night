@@ -5,9 +5,9 @@ set -e
 _CURR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 source $_CURR_DIR/setEnv.sh
 
-projects=($PROJECTS)
-i=$USERS_FROM
-j=$USERS_TO
+projects=("$PROJECTS")
+i="$USERS_FROM"
+j="$USERS_TO"
 while [[ $i -le $j ]];
 do
   for p in "${projects[@]}" 

@@ -5,8 +5,8 @@ _CURR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 source $_CURR_DIR/setEnv.sh
 
 projects=("tutorial")
-i=1
-j=40
+i=$USERS_FROM
+j=$USERS_TO
 while [[ $i -le $j ]];
 do
   for p in "${projects[@]}" 
@@ -15,8 +15,8 @@ do
     openshiftProject=$(printf '%s-%d' $p $i)
     # echo "$openshifProject"
     printf "Creating and Configuring OpenShift Project $openshiftProject for user $openshiftUser \n"
-    # oc new-project "$openshiftProject">&- && \
-    #oc label namespace "$openshiftProject" knative-eventing-injection=enabled  && \
+    oc new-project "$openshiftProject">&- && \
+    oc label namespace "$openshiftProject" knative-eventing-injection=enabled  && \
     oc create -f $CONFIGS_DIR/workshop-student-project-role.yaml -n "$openshiftProject" && \
     oc adm policy add-scc-to-user privileged -z default -n "$openshiftProject" && \
     oc adm policy add-scc-to-user anyuid -z default -n  "$openshiftProject" && \
