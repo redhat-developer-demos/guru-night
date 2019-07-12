@@ -18,8 +18,8 @@ metadata:
   name: tutorials-resource-quota
 spec:
   hard:
-    pods: 4
-    requests.cpu: "1000m"
-    requests.memory: "1512Mi"
-    limits.cpu: "2500m"
-    limits.memory: "3024Mi"
+    pods: 6
+    requests.cpu: "1100m"
+    requests.memory: "2000Mi"
+    limits.cpu: "3000m"
+    limits.memory: "5120Mi"
