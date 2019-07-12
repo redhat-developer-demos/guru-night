@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -eu
 
 _CURR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 source $_CURR_DIR/setEnv.sh

@@ -1,0 +1,25 @@
+#!/bin/bash
+set -e
+
+_CURR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+
+export CONFIGS_DIR="$_CURR_DIR/../config"
+export WORK_DIR="$_CURR_DIR/../work"
+
+# set kubeconfig file to allow system:admin login 
+export KUBECONFIG=''
+# Openshift user with cluster admin role
+export OPENSHIFT_ADMIN_USER=''
+# Openshift server API URL
+export OPENSHIFT_API_URL=''
+# START USER COUNT
+# The Number of users to create
+export USERS_FROM=1
+export USERS_TO=40
+export USER_SUFFIX='user'
+## END USER COUNT
+
+# WORKSHOP USER PROJECT CONFIG
+# The space delimited project names that will be created
+export PROJECTS='tutorial knativetutorial'
+## END WORKSHOP USER PROJECT CONFIG

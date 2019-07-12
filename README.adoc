@@ -4,6 +4,11 @@ How to setup the workshop using OpenShift4
   
 == OCP4 Setup
 
+=== RHPDS
+
+Setup OpenShift4 Cluster via RHPDS 
+
+=== Bring Your Own Cluster (BYC)
 Create a OCP4 cluster by visiting try.openshift.com and downloading the openshift installer binary for Linux or Mac
 
 1) ./openshift-install --dir=june22v2 create install-config
@@ -34,9 +39,145 @@ Follow the prompts for your SSH key, your favorite AWS Region, your Route53 doma
 
 7) OpenShift4 CLI for your environment from https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/.
 
+== Assumption
 
-== Setup Workshop
+Its assumed that the cluster has been setup in one of the ways as above.
 
-```
-node setup.js -k /Users/home/foo/kubeconfig -a 'fooPassword'
-```
+== Workshop setup
+
+=== RHPDS
+
+Once you have setup the cluster with RHPDS, please login with the cluster admin
+
+==== Install Istio 
+
+[IMPORTANT]
+=====
+**ONLY FOR RHPDS**
+The RHPDS by default applies a `ClusterResourceQuota` to the cluster, you need to remove the `ClusterResourceQuota` or alter to allow extra CPU/RAM for successful Istio install
+=====
+
+[source,bash,subs="attributes+,+macros"]
+----
+# (optional) take a the back up of listed clusterresource quotas
+oc get clusterresourcequotas.quota.openshift.io clusterquota-opentlc-mgr -o yaml > <your-backup-dir>/clusterquota-opentlc-mgr.yaml
+# scale down the operator
+oc -n gpte-userquota-operator scale deployments --replicas=0 userquota-operator
+# delete the mulitproject clusterresource quota
+oc delete clusterresourcequotas.quota.openshift.io clusterquota-opentlc-mgr
+# check if its deleted
+oc get clusterresourcequotas.quota.openshift.io
+----
+
+Istio is installed using the https://maistra.io[Maistra] operators. The instructions below are stripped down version of https://maistra.io/docs/getting_started/install/[Install on OCP]  and targetted only for OCP4.
+
+[source,bash,subs="attributes+,+macros"]
+----
+oc new-project istio-operator
+oc apply -n istio-operator -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.11/deploy/maistra-operator.yaml
+# verify deployment to see if the pods are created
+oc get pods -n istio-operator -l name=istio-operator -w 
+----
+
+===== Deploy Control Plane
+
+[source,bash,subs="attributes+,+macros"]
+----
+oc new-project istio-system
+oc apply -n istio-system -f config/basic-install.yaml
+----
+
+NOTE: It will take sometime for Istio to be deployed completely
+
+Wait for all the Istio Pods to be available
+[source,bash,subs="attributes+,+macros"]
+----
+oc -n istio-system get pods -w
+----
+
+===== Get all Service URLS of Istio Services
+
+[source,bash,subs="attributes+,+macros]
+----
+oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.host'
+----
+
+==== Install Knative
+
+We will be using Knative Serving and Knative Eventing Operators to install Knative Serving and Eventing components:
+
+===== Knative Serving
+
+Login to OpenShift console using the cluster admin credentials.
+
+* Select Knative Operators via OperatorHub
+
+image::./screenshots/select_knative_operators.png[]
+
+* Select and Install Knative Serving
+
+image::./screenshots/select_kn_serving.png[]
+image::./screenshots/install_knative_serving.png[]
+
+* Subscribe Knative Serving
+
+image::./screenshots/create_knative_serving_sub.png[]
+
+image::./screenshots/subscribed_knative_serving.png[]
+
+
+* Select and Install Knative Eventing
+
+image::./screenshots/select_kn_eventing.png[]
+image::./screenshots/install_knative_eventing.png[]
+
+* Subscribe Knative Eventing
+
+image::./screenshots/create_knative_eventing_sub.png[]
+
+image::./screenshots/subscribed_knative_eventing.png[]
+
+== Workshop users, projects and quotas
+
+=== Set Environment Variables
+Copy `bin/setEnv.example` to `bin/setEnv.sh`. Edit `bin/setEnv.sh` and update the variables with values to match your environment:
+
+=== Create Workshop Users
+
+[NOTE]
+=====
+If you are using RHPDS then the users are already created, hence you skip this step
+=====
+
+[source,bash]
+----
+./bin/createUsers.sh
+----
+
+=== Create Workshop User Group and Role
+[source,bash]
+-----
+./bin/usersAndGroupsConfig.sh
+-----
+
+You can check the group users via command, which should basically list all workshop users.
+
+[source,bash]
+----
+oc get groups workshop-students
+----
+
+=== Create Workshop Projects
+
+[source,bash]
+-----
+./bin/configProjects.sh
+-----
+
+=== Apply Resource Quota
+
+[source,bash]
+-----
+./bin/resourceQuotaToProjects.sh
+-----
+
