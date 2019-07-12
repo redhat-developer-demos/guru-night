@@ -5,11 +5,11 @@ metadata:
 spec:
   limits:
   - default:
-     cpu: "250m"
-     memory: "756Mi"
+     cpu: "200m"
+     memory: "256Mi"
     defaultRequest:
      cpu: "100m"
-     memory: "256Mi"    
+     memory: "128Mi"    
     type: Container
 ---
 apiVersion: v1
@@ -19,7 +19,7 @@ metadata:
 spec:
   hard:
     pods: 6
-    requests.cpu: "1100m"
-    requests.memory: "2000Mi"
-    limits.cpu: "3000m"
-    limits.memory: "5120Mi"
+    requests.cpu: "940m"
+    requests.memory: "1576Mi"
+    limits.cpu: "4"
+    limits.memory: "5Gi"
