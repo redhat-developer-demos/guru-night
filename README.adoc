@@ -181,3 +181,9 @@ oc get groups workshop-students
 ./bin/resourceQuotaToProjects.sh
 -----
 
+== Cleanup
+
+[source,bash]
+-----
+./bin/cleanup.sh
+-----
