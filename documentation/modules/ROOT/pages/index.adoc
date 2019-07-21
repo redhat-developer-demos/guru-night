@@ -7,9 +7,8 @@
 == Servicemesh and Serverless with OpenShift
 
 [.tile]
-.xref:openshift-basics:ROOT:index.adoc[OpenShift Basics]
-* xref:openshift-basics:ROOT:intro.adoc[Setup]
-* xref:openshift-basics:ROOT:login.adoc[Login]
+.xref:openshift-basics:ROOT:intro.adoc[OpenShift Basics]
+* xref:openshift-basics:ROOT:intro.adoc[Introduction]
 
 [.tile]
 .xref:istio-tutorial:ROOT:index.adoc[Servicemesh with Istio]
