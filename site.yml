@@ -9,7 +9,7 @@ site:
 content:
   sources:
     - url: https://github.com/redhat-developer-demos/guru-night
-      branches: sgnong
+      branches: master
       start_path: documentation
     - url: https://github.com/redhat-developer-demos/openshift-basics
       branches: master
