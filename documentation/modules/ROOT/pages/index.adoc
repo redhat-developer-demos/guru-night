@@ -4,10 +4,15 @@
 :!numbered:
 
 [.tiles.browse]
-== Servicemesh and Serverless
+== Servicemesh and Serverless with OpenShift
 
 [.tile]
-.xref:knative-tutorial-basics:ROOT:index.adoc[Servicemesh with Istio]
+.xref:openshift-basics:ROOT:index.adoc[OpenShift Basics]
+* xref:openshift-basics:ROOT:intro.adoc[Setup]
+* xref:openshift-basics:ROOT:login.adoc[Login]
+
+[.tile]
+.xref:istio-tutorial:ROOT:index.adoc[Servicemesh with Istio]
 * xref:istio-tutorial:workshop:1setup.adoc[Setup]
 * xref:istio-tutorial:workshop:2deploy-microservices.adoc[Deploy Microservices]
 

@@ -11,6 +11,8 @@ content:
     - url: https://github.com/redhat-developer-demos/guru-night
       branches: master
       start_path: documentation
+    - url: https://github.com/redhat-developer-demos/openshift-basics
+      branches: master
     - url: https://github.com/redhat-developer-demos/istio-tutorial
       branches:  dnl/blr-2019
       start_path: documentation
