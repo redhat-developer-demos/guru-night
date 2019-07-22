@@ -2,8 +2,8 @@ runtime:
   cache_dir: ./.cache/antora
 
 site:
-  title: DevNationLive Bengaluru::Workshops
-  url: https://dnl-blr-2019.devx.red
+  title: Severless and Servicemesh with OpenShift::Workshops
+  url: https://dnl-blr-staging.web.app/
   start_page: summit-guru-night::index.adoc
 
 content:
@@ -20,18 +20,18 @@ content:
       branches: dnl/blr-2019
 asciidoc:
   attributes:
-    title: DevNationLive Bengaluru::Workshops
+    title: Severless and Servicemesh with OpenShift::Workshops
     workshop: true
-    etherpad-url: https://etherpad.wikimedia.org/p/DNLBlr19
-    etherpad: https://etherpad.wikimedia.org/p/DNLBlr19
+    etherpad-url: https://etherpad.wikimedia.org/p/sgnog19
+    etherpad: https://etherpad.wikimedia.org/p/sgnog19
     namespace-suffix: -$WORKSHOP_USER
-    appdomain: apps.guru.devx.red
+    appdomain: apps.cluster-sin-1975.sin-1975.openshiftworkshop.com
     tutorial-namespace: $WORKSHOP_USER-knativetutorial
-    ocpurl: https://api.guru.devx.red:6443       
-    workshop-domain: guru.devx.red
+    ocpurl: https://api.cluster-sin-1975.sin-1975.openshiftworkshop.com:6443      
+    workshop-domain: cluster-sin-1975.sin-1975.openshiftworkshop.com
     workshop-version: release/0.5 
     path: customer$WORKSHOP_USER
-    openshift-console-url: http://example.com
+    openshift-console-url: http://console-openshift-console.apps.cluster-sin-1975.sin-1975.openshiftworkshop.com
   extensions:
     - ./lib/copy-to-clipboard.js
     - ./lib/tab-block.js
