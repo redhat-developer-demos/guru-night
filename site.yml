@@ -2,9 +2,9 @@ runtime:
   cache_dir: ./.cache/antora
 
 site:
-  title: Severless and Servicemesh with OpenShift::Workshops
-  url: https://dnl-blr-staging.web.app/
-  start_page: summit-guru-night::index.adoc
+  title: Introduction to Containers and Kubernetes
+  url: https://k8s-openshift.web.app
+  start_page: openshift-basics::index.adoc
 
 content:
   sources:
