@@ -13,14 +13,14 @@ content:
       start_path: documentation
     - url: https://github.com/redhat-developer-demos/openshift-basics
       branches: master
-    - url: https://github.com/redhat-developer-demos/istio-tutorial
-      branches:  dnl/blr-2019
-      start_path: documentation
-    - url: https://github.com/redhat-developer-demos/knative-tutorial-module-basics
-      branches: dnl/blr-2019
+    # - url: https://github.com/redhat-developer-demos/istio-tutorial
+    #   branches:  dnl/blr-2019
+    #   start_path: documentation
+    # - url: https://github.com/redhat-developer-demos/knative-tutorial-module-basics
+    #   branches: dnl/blr-2019
 asciidoc:
   attributes:
-    title: Severless and Servicemesh with OpenShift::Workshops
+    title: Introduction to Containers and Kubernetes
     workshop: true
     etherpad-url: https://etherpad.wikimedia.org/p/sgnog19
     etherpad: https://etherpad.wikimedia.org/p/sgnog19
