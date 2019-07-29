@@ -8,9 +8,9 @@ site:
 
 content:
   sources:
-    - url: https://github.com/redhat-developer-demos/guru-night
-      branches: master
-      start_path: documentation
+    # - url: https://github.com/redhat-developer-demos/guru-night
+    #   branches: master
+    #   start_path: documentation
     - url: https://github.com/redhat-developer-demos/openshift-basics
       branches: master
     # - url: https://github.com/redhat-developer-demos/istio-tutorial
@@ -25,13 +25,13 @@ asciidoc:
     etherpad-url: https://etherpad.wikimedia.org/p/sgnog19
     etherpad: https://etherpad.wikimedia.org/p/sgnog19
     namespace-suffix: -$WORKSHOP_USER
-    appdomain: apps.cluster-sin-1975.sin-1975.openshiftworkshop.com
+    appdomain: apps.cluster-sin-257f.sin-257f.openshiftworkshop.com
     tutorial-namespace: $WORKSHOP_USER-knativetutorial
-    ocpurl: https://api.cluster-sin-1975.sin-1975.openshiftworkshop.com:6443      
-    workshop-domain: cluster-sin-1975.sin-1975.openshiftworkshop.com
+    ocpurl: https://api.cluster-sin-257f.sin-257f.openshiftworkshop.com:6443      
+    workshop-domain: cluster-sin-257f.sin-257f.openshiftworkshop.com
     workshop-version: release/0.5 
     path: customer$WORKSHOP_USER
-    openshift-console-url: http://console-openshift-console.apps.cluster-sin-1975.sin-1975.openshiftworkshop.com
+    openshift-console-url: http://console-openshift-console.apps.cluster-sin-257f.sin-257f.openshiftworkshop.com
   extensions:
     - ./lib/copy-to-clipboard.js
     - ./lib/tab-block.js
