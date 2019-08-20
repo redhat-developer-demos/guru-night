@@ -1,0 +1,47 @@
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: tutorial-component-images
+  spec:
+    selector:
+      matchLabels:
+        app: tutorial-tools
+        app1: clients
+    template:
+      metadata:
+        labels:
+          app: tutorial-tools
+          app1: clients
+      spec:
+        containers:
+        - name: tutorial-tools
+          image: quay.io/rhdevelopers/tutorial-tools:0.0.1
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 1001
+          workingDir: /home/developer
+          resources:
+            limits: 
+              cpu: 4
+              memory: 6Gi
+            requests:
+              cpu: 2
+              memory: 4Gi
+          command:
+            - '/usr/local/bin/run.sh'
+          args:
+            - 'sleep'
+            - 'infinity'
+        - name: clients
+          image: 'quay.io/rhdevelopers/clients:0.0.1'
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits: 
+              cpu: "1"
+              memory: "1Gi"
+            requests:
+              cpu: "0.5"
+              memory: "512m"
+          securityContext:
+            runAsUser: 1001
+          workingDir: /home/developer

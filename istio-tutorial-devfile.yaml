@@ -1,0 +1,39 @@
+apiVersion: 1.0.0
+metadata:
+  name: rhd-istio-workshop
+projects:
+  - name: istio-tutorial
+    source:
+      type: git
+      location: 'https://github.com/redhat-developer-demos/istio-tutorial.git'
+components:
+  - id: redhat/vscode-yaml/latest
+    type: chePlugin
+  - id: redhat/vscode-xml/latest
+    type: chePlugin
+  - id: redhat/java8/latest
+    type: chePlugin
+# Tool that allows to build java application including Quarkus
+  - mountSources: true
+    args:
+      - 'sleep infinity'
+    #if Quarkus native build is required then increase the memory limit to 4Gi
+    memoryLimit: 2Gi
+    alias: tools
+    type: dockerimage
+    volumes:
+      - name: projects
+        containerPath: /projects
+    image: 'quay.io/rhdevelopers/tutorial-tools:0.0.1'
+# If you are not going to do any in cluster build then use this clients image
+# it has all need cloud native tools such as oc, kubectl, kn, tkn, jq, yq, stern etc.,
+  # - mountSources: true
+  #   args:
+  #     - 'sleep infinity'
+  #   memoryLimit: 1Gi
+  #   alias: cloud-native-clients
+  #   type: dockerimage
+  #   volumes:
+  #     - name: projects
+  #       containerPath: /projects
+  #   image: 'quay.io/rhdevelopers/clients:0.0.1'

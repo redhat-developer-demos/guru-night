@@ -1,0 +1,38 @@
+apiVersion: 1.0.0
+metadata:
+  name: quarkus-workshop
+projects:
+  - name: quarkus-tutorial
+    source:
+      type: git
+      location: 'https://github.com/redhat-developer-demos/quarkus-tutorial.git'
+components:
+  - id: redhat/vscode-yaml/latest
+    type: chePlugin
+  - id: redhat/vscode-xml/latest
+    type: chePlugin
+  - id: redhat/java8/latest
+    type: chePlugin
+  # Tool that allows to build java application including Quarkus
+  - alias: tools
+    type: kubernetes
+    mountSources: true
+    reference: component-images.yaml
+    referenceContent: |
+      - containerName: tutorial-tools
+        command:
+          - '/usr/local/bin/run.sh'
+        args:
+          - 'sleep'
+          - 'infinity'
+  - alias: clients
+    type: kubernetes
+    mountSources: true
+    reference: component-images.yaml
+    referenceContent: |
+      - containerName: clients
+        command:
+          - '/usr/local/bin/run.sh'
+        args:
+          - 'sleep'
+          - 'infinity'
