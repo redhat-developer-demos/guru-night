@@ -21,5 +21,8 @@ components:
     selector:
       app.kubernetes.io/name: tutorial-tools
       app.kubernetes.io/component: workshop
-      app.kubernetes.io/part-of: rhd-workshops 
+      app.kubernetes.io/part-of: rhd-workshops
+    env:
+    - name: TUTORIAL_HOME
+      value: "/projects/knative-tutorial"
 
