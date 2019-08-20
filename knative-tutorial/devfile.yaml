@@ -17,22 +17,16 @@ components:
   - alias: tools
     type: kubernetes
     mountSources: true
-    reference: component-images.yaml
-    referenceContent: |
-      - containerName: tutorial-tools
-        command:
-          - '/usr/local/bin/run.sh'
-        args:
-          - 'sleep'
-          - 'infinity'
+    reference: ../component-images.yaml
+    selector:
+      app.kubernetes.io/name: tutorial-tools
+      app.kubernetes.io/component: workshop
+      app.kubernetes.io/part-of: rhd-workshops 
   - alias: clients
     type: kubernetes
     mountSources: true
-    reference: component-images.yaml
-    referenceContent: |
-      - containerName: clients
-        command:
-          - '/usr/local/bin/run.sh'
-        args:
-          - 'sleep'
-          - 'infinity'
+    reference: ../component-images.yaml
+    selector:
+      app.kubernetes.io/name: tutorial-tools
+      app.kubernetes.io/component: workshop
+      app.kubernetes.io/part-of: rhd-workshops

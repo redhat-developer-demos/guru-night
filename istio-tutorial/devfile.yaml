@@ -1,0 +1,32 @@
+apiVersion: 1.0.0
+metadata:
+  name: rhd-istio-workshop
+projects:
+  - name: istio-tutorial
+    source:
+      type: git
+      location: 'https://github.com/redhat-developer-demos/istio-tutorial.git'
+components:
+  - id: redhat/vscode-yaml/latest
+    type: chePlugin
+  - id: redhat/vscode-xml/latest
+    type: chePlugin
+  - id: redhat/java8/latest
+    type: chePlugin
+  # Tool that allows to build java application including Quarkus
+  - alias: tools
+    type: kubernetes
+    mountSources: true
+    reference: ../component-images.yaml
+    selector:
+      app.kubernetes.io/name: tutorial-tools
+      app.kubernetes.io/component: workshop
+      app.kubernetes.io/part-of: rhd-workshops 
+  - alias: clients
+    type: kubernetes
+    mountSources: true
+    reference: ../component-images.yaml
+    selector:
+      app.kubernetes.io/name: tutorial-tools
+      app.kubernetes.io/component: workshop
+      app.kubernetes.io/part-of: rhd-workshops
