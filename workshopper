@@ -1,0 +1,120 @@
+#!/bin/bash
+
+set -o pipefail
+
+# Set options:
+
+set -o pipefail
+
+# Save global script args
+ARGS="$@"
+
+set -eu
+
+run(){
+  local first_arg=${1:-}
+  local cmd_dir="$(basedir)/commands"
+  local config_dir="$(basedir)/config"
+  local command
+
+   if [ -n "$first_arg" ] && [[ ${first_arg} != -* ]]; then
+      command="$first_arg"
+      if [ ! -f "$cmd_dir/$command" ] && [ "${command}" != "help" ] ; then
+        echo
+        echo ">>>> Unknown command '$command'"
+        echo
+        display_help
+        exit 1
+      fi
+    else
+      command="help"
+      echo "No command given"
+      echo
+    fi
+
+    if [ "${command}" = "help" ] || $(hasflag --help -h); then
+        display_help ${command:-}
+        exit 0
+    fi
+
+    source "$cmd_dir/$command"
+
+    eval "${command}::run"
+}
+
+display_help() {
+  local command=${1:-}
+  local cmd_dir="$(basedir)/commands"
+
+  if [ -z "${command}" ] || [ "$command" = "help" ]; then
+    cat << EOT
+Usage: workshopper <subcommand> <opts>
+Red Hat Developers Workshop Setup Helper
+Commands:
+EOT
+    for cmd in $(ls $cmd_dir); do
+      if [ -f $cmd_dir/$cmd ]; then
+        source $cmd_dir/$cmd
+        printf "   %-15s  %s\n" $cmd "$($cmd::description)"
+      fi
+    done
+    printf "   %-15s  %s\n" "help" "Print this help message"
+  else
+    source $cmd_dir/$command
+    cat <<EOT
+$($command::description)
+Usage: workshopper $command [... options ...]
+EOT
+    echo "Options for $command:"
+    echo -e "$($command::usage)"
+  fi
+
+  cat <<EOT
+Global Options:
+  -h --help                 Print this help message
+EOT
+}
+
+basedir() {
+  # Default is current directory
+  local script=${BASH_SOURCE[0]}
+
+  # Resolve symbolic links
+  if [ -L $script ]; then
+      if readlink -f $script >/dev/null 2>&1; then
+          script=$(readlink -f $script)
+      elif readlink $script >/dev/null 2>&1; then
+          script=$(readlink $script)
+      elif realpath $script >/dev/null 2>&1; then
+          script=$(realpath $script)
+      else
+          echo "ERROR: Cannot resolve symbolic link $script"
+          exit 1
+      fi
+  fi
+
+  local dir=$(dirname "$script")
+  local full_dir=$(cd "${dir}" && pwd)
+  echo ${full_dir}
+}
+
+
+configdir() {
+  echo "$(basedir)/config"
+}
+
+# ===========================================================
+# Startup ...
+
+# Read in some helpers
+source $(basedir)/helpers.sh
+
+# Configure environment variables
+source $(basedir)/setEnv.sh
+
+if $(hasflag --verbose -v); then
+    export PS4='+($(basename ${BASH_SOURCE[0]}):${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'
+    set -x
+fi
+
+run $ARGS

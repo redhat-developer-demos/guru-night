@@ -1,0 +1,73 @@
+#!/bin/bash
+# get other values as parameters
+
+createUsers::run(){
+
+  echo "Generating Workshop Users"
+
+  PASSWORD=${USER_PASSWORD:-'open$hif1!'}
+
+  # keep this name avoids setting key in the oc secret command
+  PASSWORD_FILE="$WORK_DIR/htpasswd"
+  ADMIN_USER_NAME="ocpadmin"
+
+  if [ ! -f $PASSWORD_FILE ];
+  then
+      printf "$PASSWORD_FILE file does not exist, creating"
+      touch "$PASSWORD_FILE"
+  else
+    printf "$PASSWORD_FILE file alreay exist resetting"
+    : > "$PASSWORD_FILE"
+  fi
+
+  local user_from=$(readopt -f --from)
+  if [ -z $user_from ]; then 
+     user_from=$USERS_FROM
+  fi
+
+  local user_to=$(readopt -t --to)
+  if [ -z $user_to ]; then 
+     user_to=$USERS_TO
+  fi
+  
+  local user_prefix=$(readopt -p --prefix)
+   if [ -z $user_prefix ]; then 
+     user_prefix=$USER_PREFIX
+  fi
+
+  for ((i=$user_from; i<=user_to ; i++ ));
+  do
+    echo "Creating user $user_prefix$i"  
+    htpasswd -b $PASSWORD_FILE "$user_prefix$i" $PASSWORD
+  done
+
+  # Add openshift cluster admin user
+  htpasswd -b $PASSWORD_FILE $ADMIN_USER_NAME $ADMIN_PASSWORD
+
+  # Create user secret in OpenShift
+  ! oc -n openshift-config delete secret htpass-secret
+  oc -n openshift-config create secret generic htpass-secret --from-file="$PASSWORD_FILE"
+
+  #TODO delete the existing OAuth named htpassidp
+  # Add the users to OpenShift OAuth
+  oc -n openshift-config get oauth cluster -o yaml | yq w - -s "$(configdir)/htpass.yaml" | oc apply -f -
+
+  # sleep for 30 seconds for the pods to be restarted
+  echo "Wait for 30s for new OAuth to take effect"
+  sleep 30
+
+  # Make the admin as cluster admin
+  oc adm policy add-cluster-role-to-user cluster-admin $ADMIN_USER_NAME 
+}
+
+createUsers::usage(){
+ cat <<EOT
+  -f --from <user count from>    The starting user count e.g. 1
+  -t --to <user count to>        The ending user count e.g. 10
+  -p --prefix <userprefix>       The username prefix e.g. user
+EOT
+}
+
+createUsers::description(){
+  echo "Creates workshop users in OpenShift"
+}

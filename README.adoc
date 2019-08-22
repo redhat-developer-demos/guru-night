@@ -1,7 +1,15 @@
 = Red Hat Developers Workshop Guide
 
 How to setup the workshop using OpenShift4 
-  
+
+== Pre-req
+
+The scripts uses these tools for various functions, please have them installed before proceeding further in the setup.
+
+- https://github.com/mikefarah/yq[yq]
+- https://stedolan.github.io/jq/[jq]
+- https://github.com/che-incubator/chectl[chectl]
+
 == OCP4 Setup
 
 === RHPDS
@@ -48,6 +56,16 @@ Its assumed that the cluster has been setup in one of the ways as above.
 === RHPDS
 
 Once you have setup the cluster with RHPDS, please login with the cluster admin
+
+==== Install Nexus
+
+Since there will be lot java artifacts required 
+
+[source,bash,subs="attributes+,+macros"]
+----
+oc new-project rhd-workshop-infra --skip-config-write=true
+oc new-app -n rhd-workshop-infra sonatype/nexus
+----
 
 ==== Install Istio 
 
@@ -140,7 +158,7 @@ image::./screenshots/subscribed_knative_eventing.png[]
 == Workshop users, projects and quotas
 
 === Set Environment Variables
-Copy `bin/setEnv.example` to `bin/setEnv.sh`. Edit `bin/setEnv.sh` and update the variables with values to match your environment:
+Copy `setEnv.example` to `setEnv.sh`. Edit `setEnv.sh` and update the variables with values to match your environment:
 
 === Create Workshop Users
 
@@ -151,13 +169,13 @@ If you are using RHPDS then the users are already created, hence you skip this s
 
 [source,bash]
 ----
-./bin/createUsers.sh
+./workshopper createUsers
 ----
 
 === Create Workshop User Group and Role
 [source,bash]
 -----
-./bin/usersAndGroupsConfig.sh
+./workshopper usersAndGroups
 -----
 
 You can check the group users via command, which should basically list all workshop users.
@@ -171,19 +189,12 @@ oc get groups workshop-students
 
 [source,bash]
 -----
-./bin/configProjects.sh
------
-
-=== Apply Resource Quota
-
-[source,bash]
------
-./bin/resourceQuotaToProjects.sh
+./workshopper configProjects
 -----
 
 == Cleanup
 
 [source,bash]
 -----
-./bin/cleanup.sh
+./workshopper cleanup
 -----

@@ -1,0 +1,62 @@
+#!/bin/bash
+
+cleanup::run() {
+  
+  local projects=$(readopt -n --projects)
+  if [ -z $projects ]; then 
+     projects=($PROJECTS)
+  fi
+  
+  local user_from=$(readopt -f --from)
+  if [ -z $user_from ]; then 
+     user_from=$USERS_FROM
+  fi
+
+  local user_to=$(readopt -t --to)
+  if [ -z $user_to ]; then 
+     user_to=$USERS_TO
+  fi
+  
+  local user_prefix=$(readopt -p --prefix)
+   if [ -z $user_prefix ]; then 
+     user_prefix=$USER_PREFIX
+  fi
+
+  for ((i=$user_from; i<=user_to ; i++ ));
+  do
+    for p in "${projects[@]}" 
+    do
+      openshiftUser=$(printf 'user%d' $i)
+      openshiftProject=$(printf '%s-%d' $p $i)
+      printf "Deleting OpenShift Project $openshiftProject \n"
+      oc adm policy remove-scc-from-user privileged -z default -n "$openshiftProject" && \
+      oc adm policy remove-scc-from-user anyuid -z default -n  "$openshiftProject" && \
+      oc adm policy remove-role-from-user admin "$openshiftUser" -n "$openshiftProject" && \
+      oc policy remove-role-from-user view "$openshiftUser" -n "istio-system" && \
+      oc policy remove-role-from-user workshop-student-project "$openshiftUser" --role-namespace="$openshiftProject" -n "$openshiftProject"
+      oc delete -f "$(configdir)/workshop-student-project-role.yaml" -n "$openshiftProject" && \
+      oc delete project --ignore-not-found=true "$openshiftProject"
+    done
+  done
+
+  # Delete the workshop students group 
+  oc delete groups.user.openshift.io workshop-students
+
+  # Delete the workshop student role 
+  oc delete clusterrole workshop-student
+
+  #TODO delete the users and remove htpassidp from oauth
+}
+
+cleanup::usage(){
+  cat <<EOT
+  -f --from <user count from>    The starting user count e.g. 1
+  -t --to <user count to>        The ending user count e.g. 10
+  -p --prefix <userprefix>       The username prefix e.g. user
+  -n --projects <userpojects>    The space user project name prefixes e.g. tutorial
+EOT
+}
+
+cleanup::description(){
+  echo "Clean workshop setup"
+}

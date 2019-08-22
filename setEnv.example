@@ -12,14 +12,28 @@ export KUBECONFIG=''
 export OPENSHIFT_ADMIN_USER=''
 # Openshift server API URL
 export OPENSHIFT_API_URL=''
-# START USER COUNT
+# OpenShift Domain Suffix 
+export OPENSHIFT_DOMAIN_SUFFIX=''
+# Openshift User default password
+export WORKSHOP_USER_DEFAULT_PASSWORD=''
+
+### START CHE SETTINGS
+# The Che URL
+export CHE_URL=''
+# The Che Keycloak URL
+export CHE_KEYCLOAK_URL=''
+# The DEVFILE to use for workshop
+export WORKSHOP_DEVFILE_URL=''
+### END CHE SETTINGS
+
+### START USER COUNT
 # The Number of users to create
 export USERS_FROM=1
 export USERS_TO=40
-export USER_SUFFIX='user'
-## END USER COUNT
+export USER_PREFIX='user'
+### END USER COUNT
 
 # WORKSHOP USER PROJECT CONFIG
 # The space delimited project names that will be created
-export PROJECTS='tutorial knativetutorial'
+export PROJECTS='tutorial'
 ## END WORKSHOP USER PROJECT CONFIG

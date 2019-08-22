@@ -1,0 +1,61 @@
+#!/bin/bash
+
+configProjects::run(){
+  
+  echo "Apply the Red Hat Developers Workshop Project Template"
+  oc apply -f "$(configdir)/project-request-template.yaml" -n openshift-config
+  echo "Apply Hat Developers Workshop Project Template"
+  oc apply -f "$(configdir)/project-request-config.yaml" -n openshift-config
+
+  local projects=$(readopt -n --projects)
+  if [ -z $projects ]; then 
+     projects=($PROJECTS)
+  fi
+  
+  local user_from=$(readopt -f --from)
+  if [ -z $user_from ]; then 
+     user_from=$USERS_FROM
+  fi
+
+  local user_to=$(readopt -t --to)
+  if [ -z $user_to ]; then 
+     user_to=$USERS_TO
+  fi
+  
+  local user_prefix=$(readopt -p --prefix)
+   if [ -z $user_prefix ]; then 
+     user_prefix=$USER_PREFIX
+  fi
+
+  for ((i=$user_from; i<=user_to ; i++ ));
+  do
+    for p in "${projects[@]}" 
+    do
+      openshiftUser=$(printf "$user_prefix%d" $i)
+      openshiftProject=$(printf '%s-%d' $p $i)
+      printf "Creating and Configuring OpenShift Project $openshiftProject for user $openshiftUser \n"
+      oc new-project "$openshiftProject" --skip-config-write='false'>&- && \
+      oc policy add-role-to-user admin "$openshiftUser" -n "$openshiftProject" && \
+      oc adm policy add-scc-to-user privileged -z default -n "$openshiftProject" && \
+      oc adm policy add-scc-to-user anyuid -z default -n  "$openshiftProject" && \
+      oc policy add-role-to-user view "$openshiftUser" -n "istio-system"
+  # added via project template
+  #    oc create -f "$(configdir)/workshop-student-project-role.yaml" -n "$openshiftProject" && \
+  # bound via project template
+  #    oc policy add-role-to-user workshop-student-project "$openshiftUser" --role-namespace="$openshiftProject" -n "$openshiftProject"
+    done
+  done
+}
+
+configProjects::usage(){
+   cat <<EOT
+  -f --from <user count from>    The starting user count e.g. 1
+  -t --to <user count to>        The ending user count e.g. 10
+  -p --prefix <userprefix>       The username prefix e.g. user
+  -n --projects <userpojects>    The space user project name prefixes e.g. tutorial
+EOT
+}
+
+configProjects::description(){
+  echo "Creates and Configures OpenShift projects for the workshop"
+}

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+login::run(){
+ 
+ local user=$(readopt -u --username)
+ echo "Trying to login as user $user"
+ 
+ if [ -z "${user}" ]; then 
+   user="${OPENSHIFT_ADMIN_USER}"
+ fi
+
+ oc login -u $user $OPENSHIFT_API_URL
+
+}
+
+# Specific usage of this script
+login::usage() {
+  cat <<EOT
+  -u --username <name>      User to login with (mandatory)
+EOT
+}
+
+login::description(){
+  echo "Log the user into OpenShift"
+}
+

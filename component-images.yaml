@@ -14,6 +14,9 @@ items:
       - name: tutorial-tools
         image: quay.io/rhdevelopers/tutorial-tools:0.0.1
         imagePullPolicy: IfNotPresent
+        env:
+         - name: MAVEN_MIRROR_URL
+           value: 'http://nexus.rhd-workshop-infra:8081/nexus/content/groups/public'
         securityContext:
           runAsUser: 1001
         workingDir: /home/developer

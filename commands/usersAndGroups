@@ -1,0 +1,51 @@
+#!/bin/bash
+
+usersAndGroups::run(){
+  echo "Creating Workshop Students Cluster Role"
+
+  oc apply -f "$(configdir)/workshop-student-roles.yaml"
+
+  local groupUsers="";
+  echo "Adding Users to Group workshop-students"
+
+  local user_from=$(readopt -f --from)
+  if [ -z $user_from ]; then 
+     user_from=$USERS_FROM
+  fi
+
+  local user_to=$(readopt -t --to)
+  if [ -z $user_to ]; then 
+     user_to=$USERS_TO
+  fi
+  
+  local user_prefix=$(readopt -p --prefix)
+   if [ -z $user_prefix ]; then 
+     user_prefix=$USER_PREFIX
+  fi
+
+  for ((i=$user_from; i<=user_to ; i++ ));
+  do
+    yq w -i "$(configdir)/workshop-students-group.yaml" \
+      "users[+]" $(printf "$USER_PREFIX%d" $i)
+  done
+
+  oc apply -f "$(configdir)/workshop-students-group.yaml"
+
+  # Add role to workshop students
+  oc adm policy add-cluster-role-to-group workshop-student workshop-students
+
+  # Reset it back so that can be used with another setup
+  yq d -i "$(configdir)/workshop-students-group.yaml" "users" "[]"
+}
+
+usersAndGroups::usage(){
+   cat <<EOT
+  -f --from <user count from>    The starting user count e.g. 1
+  -t --to <user count to>        The ending user count e.g. 10
+  -p --prefix <userprefix>       The username prefix e.g. user
+EOT
+}
+
+usersAndGroups::description(){
+  echo "Configures users and groups for the workshop"
+}

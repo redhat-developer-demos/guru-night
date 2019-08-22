@@ -40,4 +40,4 @@ dev-site.yml
 htpasswd
 work
 .cache
-bin/setEnv.sh
+**/setEnv.sh
