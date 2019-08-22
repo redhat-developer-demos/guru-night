@@ -5,7 +5,7 @@ projects:
   - name: knative-tutorial
     source:
       type: git
-      location: 'https://github.com/redhat-developer-demos/istio-tutorial.git' 
+      location: 'https://github.com/redhat-developer-demos/knative-tutorial.git' 
 components:
   - id: redhat/vscode-yaml/latest
     type: chePlugin

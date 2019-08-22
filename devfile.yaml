@@ -9,7 +9,7 @@ projects:
   - name: knative-tutorial
     source:
       type: git
-      location: 'https://github.com/redhat-developer-demos/istio-tutorial.git'
+      location: 'https://github.com/redhat-developer-demos/knative-tutorial.git'
   - name: quarkus-tutorial
     source:
       type: git
