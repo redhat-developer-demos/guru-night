@@ -120,6 +120,17 @@ oc -n istio-system get pods -w
 oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.host'
 ----
 
+==== Install Eclipse Che
+
+[source,bash,subs="attributes+,+macros]
+----
+oc new-project che --skip-config-write='false'
+----
+
+Install Eclipse Che 7 via Operator Hub Console
+
+NOTE: Section will be updated with screenshots
+
 ==== Install Knative
 
 We will be using Knative Serving and Knative Eventing Operators to install Knative Serving and Eventing components:
