@@ -4,6 +4,7 @@ createWorkspaces::run(){
   # Check if pre-req commands exists
   hash chectl
   hash jq
+  hash http
 
   NL=$'\n'
 
@@ -26,10 +27,17 @@ createWorkspaces::run(){
   do
     CHE_USER="$user_prefix$i"
     CHE_PASSWORD="${WORKSHOP_USER_DEFAULT_PASSWORD}"
+    oc login -u $CHE_USER -p $CHE_PASSWORD $OPENSHIFT_API_URL &>/dev/null
+    SUBJECT_TOKEN=$(oc whoami --show-token)
+    # echo "$SUBJECT_TOKEN"
     TOKEN_ENDPOINT="http://${CHE_KEYCLOAK_URL}/auth/realms/che/protocol/openid-connect/token"
-    CHE_ACCESS_TOKEN=$(curl -vsSL --data "grant_type=password&client_id=che-public&username=${CHE_USER}&password=${CHE_PASSWORD}" \
-          ${TOKEN_ENDPOINT} | jq -r .access_token)
-    echo "User: $CHE_USER $NL Token: $CHE_ACCESS_TOKEN"  
+    CHE_ACCESS_TOKEN=$(http --form $TOKEN_ENDPOINT client_id='che-public' \
+     grant_type='urn:ietf:params:oauth:grant-type:token-exchange' \
+     subject_token="${SUBJECT_TOKEN}" \
+     subject_issuer='openshift-v4' \
+     subject_token_type='urn:ietf:params:oauth:token-type:access_token'| jq -r .access_token)
+    echo "User: $CHE_USER $NL Token: $CHE_ACCESS_TOKEN"
+    oc logout &>/dev/null
   done
 }
 

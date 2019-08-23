@@ -131,6 +131,10 @@ Install Eclipse Che 7 via Operator Hub Console
 
 NOTE: Section will be updated with screenshots
 
+===== Disable waiting for PV
+
+Update the configmap `custom` in `che` namespace with value `CHE_INFRA_KUBERNETES_PVC_WAIT__BOUND: 'false'`
+
 ===== Cache Eclipse Che Images
 
 [source,bash,subs="attributes+,+macros]

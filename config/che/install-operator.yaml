@@ -1,0 +1,33 @@
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: workspace
+  namespace: che
+spec:
+  targetNamespaces:
+    - che
+---
+apiVersion: operators.coreos.com/v1
+kind: CatalogSourceConfig
+metadata:
+  name: installed-eclipse-che-che
+  namespace: openshift-marketplace
+spec:
+  packages: eclipse-che
+  targetNamespace: che
+  source: community-operators
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: eclipse-che
+  namespace: che
+  labels:
+    csc-owner-name: installed-eclipse-che-che
+    csc-owner-namespace: openshift-marketplace
+spec:
+  channel: stable
+  name: eclipse-che
+  source: installed-eclipse-che-che
+  sourceNamespace: che
