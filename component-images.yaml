@@ -10,6 +10,8 @@ items:
         app.kubernetes.io/component: workshop
         app.kubernetes.io/part-of: rhd-workshops
     spec:
+      securityContext:
+        runAsUser: 1001    
       containers:
       - name: tutorial-tools
         image: quay.io/rhdevelopers/tutorial-tools:0.0.1
@@ -17,8 +19,8 @@ items:
         env:
          - name: MAVEN_MIRROR_URL
            value: 'http://nexus.rhd-workshop-infra:8081/nexus/content/groups/public'
-        securityContext:
-          runAsUser: 1001
+        # securityContext:
+        #   runAsUser: 1001
         workingDir: /home/developer
         resources:
           limits: 

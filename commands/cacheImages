@@ -1,0 +1,16 @@
+#!/bin/bash
+
+cacheImages::run() {
+ local ns='rhd-workshop-infra'
+ oc process -f "$(configdir)/img-cacher/serviceaccount.yaml" | oc apply -n $ns -f -
+ oc apply -n $ns -f "$(configdir)/img-cacher/configmap.yaml"
+ oc process -f "$(configdir)/img-cacher/app.yaml" -p IMAGE=quay.io/openshiftio/kubernetes-image-puller  | oc -n $ns apply -f - 
+}
+
+cacheImages::usage(){
+  echo "No parameters"
+}
+
+cacheImages::description(){
+  echo "Cache container images on all nodes"
+}

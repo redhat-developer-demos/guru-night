@@ -1,2 +1,2 @@
 #!/bin/bash
-complete -W "cleanup configProjects createUsers createWorkspaces help login usersAndGroups" workshopper
+complete -W "cleanup cacheImages configProjects createUsers createWorkspaces help login usersAndGroups" workshopper

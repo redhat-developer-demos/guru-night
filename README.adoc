@@ -63,7 +63,7 @@ Since there will be lot java artifacts required
 
 [source,bash,subs="attributes+,+macros"]
 ----
-oc new-project rhd-workshop-infra --skip-config-write=true
+oc adm new-project rhd-workshop-infra
 oc new-app -n rhd-workshop-infra sonatype/nexus
 ----
 
@@ -91,7 +91,7 @@ Istio is installed using the https://maistra.io[Maistra] operators. The instruct
 
 [source,bash,subs="attributes+,+macros"]
 ----
-oc new-project istio-operator
+oc adm new-project istio-operator
 oc apply -n istio-operator -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.11/deploy/maistra-operator.yaml
 # verify deployment to see if the pods are created
 oc get pods -n istio-operator -l name=istio-operator -w 
@@ -101,7 +101,7 @@ oc get pods -n istio-operator -l name=istio-operator -w
 
 [source,bash,subs="attributes+,+macros"]
 ----
-oc new-project istio-system
+oc adm new-project istio-system
 oc apply -n istio-system -f config/basic-install.yaml
 ----
 
@@ -124,12 +124,19 @@ oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.h
 
 [source,bash,subs="attributes+,+macros]
 ----
-oc new-project che --skip-config-write='false'
+oc adm new-project che --description="Eclipse Che"
 ----
 
 Install Eclipse Che 7 via Operator Hub Console
 
 NOTE: Section will be updated with screenshots
+
+===== Cache Eclipse Che Images
+
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper cacheImages
+----
 
 ==== Install Knative
 
