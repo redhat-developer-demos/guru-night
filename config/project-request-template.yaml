@@ -17,16 +17,7 @@ objects:
       defaultRequest:
         cpu: "100m"
         memory: "128Mi"
-    # TODOs remove this as quota is applied
-      # max:
-      #   cpu: 4
-      #   memory: 6Gi
       type: Container
-    # TODO remove this as quota is applied
-    # - max:
-    #     cpu: 4
-    #     memory: 12Gi
-    #   type: Pod
 - apiVersion: v1
   kind: ResourceQuota
   metadata:
@@ -34,10 +25,10 @@ objects:
   spec:
     hard:
       pods: 6
-      requests.cpu: "940m"
-      requests.memory: "1576Mi"
-      limits.cpu: "4"
-      limits.memory: "5Gi"
+      requests.cpu: "4500m"
+      requests.memory: "12Gi"
+      limits.cpu: "6500m"
+      limits.memory: "16Gi"
 - apiVersion: networking.k8s.io/v1
   kind: NetworkPolicy
   metadata:

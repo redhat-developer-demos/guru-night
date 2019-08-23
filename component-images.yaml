@@ -17,7 +17,7 @@ items:
         env:
          - name: MAVEN_MIRROR_URL
            value: 'http://nexus.rhd-workshop-infra:8081/nexus/content/groups/public'
-        workingDir: /home/developer
+        workingDir: /opt/developer
         resources:
           limits: 
             cpu: 4
@@ -50,4 +50,4 @@ items:
           requests:
             cpu: "0.5"
             memory: "512m"
-        workingDir: /home/developer
+        workingDir:  /opt/developer
