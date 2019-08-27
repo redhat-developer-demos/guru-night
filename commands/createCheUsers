@@ -1,0 +1,67 @@
+#!/bin/bash
+
+createCheUsers::run(){
+  # Check if pre-req commands exists
+  hash chectl
+  hash jq
+  hash http
+
+  NL=$'\n'
+
+  local user_from=$(readopt -f --from)
+  if [ -z $user_from ]; then 
+     user_from=$USERS_FROM
+  fi
+
+  local user_to=$(readopt -t --to)
+  if [ -z $user_to ]; then 
+     user_to=$USERS_TO
+  fi
+  
+  local user_prefix=$(readopt -p --prefix)
+   if [ -z $user_prefix ]; then 
+     user_prefix=$USER_PREFIX
+  fi
+  
+  local keycloakAdminPassword=$(oc get -n che deployment keycloak -o jsonpath='{.spec.template.spec.containers[*].env[?(@.name=="KEYCLOAK_PASSWORD")].value}')
+  local cheKeyCloakUrl="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
+  local tokenEndpoint="$cheKeyCloakUrl/auth/realms/master/protocol/openid-connect/token"
+
+
+  for ((i=$user_from; i<=user_to ; i++ ));
+  do
+    local token=$(http --form POST $tokenEndpoint \
+    grant_type="password" client_id="admin-cli" \
+    username="admin" password="$keycloakAdminPassword" | jq -r '.access_token')
+    # echo "$token"
+    local che_user="$user_prefix$i"
+    local che_user_password="${WORKSHOP_USER_DEFAULT_PASSWORD}" 
+    local che_post_url="$cheKeyCloakUrl/auth/admin/realms/che/users"
+    # echo "Creating user '$user_prefix$i' $NL"
+    http $che_post_url "Authorization: Bearer $token" \
+     email="$user_prefix$i@example.com" \
+     firstName="$user_prefix" \
+     lastName="$i" \
+     enabled='true'\
+     emailVerified='true'\
+     username="$che_user"
+    local userid=$(http --headers --body $che_post_url "Authorization: Bearer $token" username=="$che_user" | jq -r '.[0].id')
+    echo "Created user $user_prefix$i with UserId $userid"
+    http PUT "$che_post_url/$userid/reset-password" "Authorization: Bearer $token" \
+     temporary='false' \
+     type='password' \
+     value="$che_user_password"
+  done
+}
+
+createCheUsers::usage(){
+   cat <<EOT
+  -f --from <user count from>    The starting user count e.g. 1
+  -t --to <user count to>        The ending user count e.g. 10
+  -p --prefix <userprefix>       The username prefix e.g. user
+EOT
+}
+
+createCheUsers::description(){
+  echo "Creates Che workspace for each workshop user"
+}

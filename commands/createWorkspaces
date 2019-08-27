@@ -1,6 +1,9 @@
 #!/bin/bash
-
 createWorkspaces::run(){
+
+  local cheKeyCloakUrl="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
+  local tokenEndpoint="$cheKeyCloakUrl/auth/realms/che/protocol/openid-connect/token"
+
   # Check if pre-req commands exists
   hash chectl
   hash jq
@@ -25,19 +28,17 @@ createWorkspaces::run(){
   
   for ((i=$user_from; i<=user_to ; i++ ));
   do
-    CHE_USER="$user_prefix$i"
-    CHE_PASSWORD="${WORKSHOP_USER_DEFAULT_PASSWORD}"
-    oc login -u $CHE_USER -p $CHE_PASSWORD $OPENSHIFT_API_URL &>/dev/null
-    SUBJECT_TOKEN=$(oc whoami --show-token)
-    # echo "$SUBJECT_TOKEN"
-    TOKEN_ENDPOINT="http://${CHE_KEYCLOAK_URL}/auth/realms/che/protocol/openid-connect/token"
-    CHE_ACCESS_TOKEN=$(http --form $TOKEN_ENDPOINT client_id='che-public' \
-     grant_type='urn:ietf:params:oauth:grant-type:token-exchange' \
-     subject_token="${SUBJECT_TOKEN}" \
-     subject_issuer='openshift-v4' \
-     subject_token_type='urn:ietf:params:oauth:token-type:access_token'| jq -r .access_token)
-    echo "User: $CHE_USER $NL Token: $CHE_ACCESS_TOKEN"
-    oc logout &>/dev/null
+    local che_user="$user_prefix$i"
+    local che_user_password="${WORKSHOP_USER_DEFAULT_PASSWORD}" 
+    local token=$(http --form POST $tokenEndpoint \
+    grant_type="password" client_id="che-public" \
+    username="$che_user" password="$che_user_password" | jq -r '.access_token')
+    # echo "$token"
+    echo "Creating Eclipse Che workspace for user $user_prefix$i"
+    local wsp_url=$(chectl workspace:start \
+      --devfile="${WORKSHOP_DEVFILE_URL}" \
+      --access-token="$token" 2>&1 | egrep -o 'https?://[^ ")]+' | tail -1 )    
+    echo "$user_prefix$i:$wsp_url" >> $_CURR_DIR/workspaces.txt
   done
 }
 

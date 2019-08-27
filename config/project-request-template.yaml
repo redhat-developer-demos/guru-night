@@ -63,6 +63,7 @@ objects:
   kind: Role
   metadata:
     name: workshop-student-project
+    namespace: ${PROJECT_NAME}
   rules:
     - apiGroups: ["serving.knative.dev"]
       resources: ["*"]
@@ -147,7 +148,7 @@ objects:
   subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: User
-    name: ${PROJECT_ADMIN_USER}
+    name: ${PROJECT_REQUESTING_USER}
 parameters:
 - name: PROJECT_NAME
 - name: PROJECT_DISPLAYNAME

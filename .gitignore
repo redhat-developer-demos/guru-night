@@ -41,3 +41,4 @@ htpasswd
 work
 .cache
 **/setEnv.sh
+workspaces.txt

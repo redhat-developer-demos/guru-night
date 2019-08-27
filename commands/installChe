@@ -1,0 +1,13 @@
+#!/bin/bash
+
+installChe::run() {
+ oc apply -n "openshift-marketplace" -f "$(configdir)/che/install-operator.yaml" 
+}
+
+installChe::usage(){
+  echo "No parameters"
+}
+
+installChe::description(){
+  echo "Install Eclipse Che via Operator"
+}

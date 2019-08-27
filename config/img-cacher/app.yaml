@@ -24,7 +24,7 @@ objects:
       spec:
         containers:
         - name: kubernetes-image-puller
-          image: ${IMAGE}:${IMAGE_TAG}
+          image: quay.io/rhdevelopers/kubernetes-image-puller:1.0.0
           imagePullPolicy: IfNotPresent
           envFrom:
           - configMapRef:
@@ -36,6 +36,6 @@ parameters:
 - name: SERVICE_ACCT_CREDENTIALS_SECRET
   value: k8s-image-puller-token
 - name: IMAGE
-  value: kubernetes-image-puller
+  value: quay.io/rhdevelopers/kubernetes-image-puller
 - name: IMAGE_TAG
-  value: latest
+  value: 1.0.0

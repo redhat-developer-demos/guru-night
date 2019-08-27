@@ -40,9 +40,8 @@ configProjects::run(){
       oc adm policy add-scc-to-user anyuid -z default -n  "$openshiftProject" && \
       oc policy add-role-to-user view "$openshiftUser" -n "istio-system"
   # added via project template
-  #    oc create -f "$(configdir)/workshop-student-project-role.yaml" -n "$openshiftProject" && \
-  # bound via project template
-  #    oc policy add-role-to-user workshop-student-project "$openshiftUser" --role-namespace="$openshiftProject" -n "$openshiftProject"
+  #   oc create -f "$(configdir)/workshop-student-project-role.yaml" -n "$openshiftProject" && \
+     oc policy add-role-to-user workshop-student-project "$openshiftUser" --role-namespace="$openshiftProject" -n "$openshiftProject"
     done
   done
 }

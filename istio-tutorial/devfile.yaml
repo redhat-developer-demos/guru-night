@@ -17,7 +17,7 @@ components:
   - alias: tools
     type: kubernetes
     mountSources: true
-    reference: ../component-images.yaml
+    reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
     selector:
       app.kubernetes.io/name: tutorial-tools
       app.kubernetes.io/component: workshop

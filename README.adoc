@@ -125,15 +125,53 @@ oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.h
 [source,bash,subs="attributes+,+macros]
 ----
 oc adm new-project che --description="Eclipse Che"
+./workshopper installChe
 ----
 
-Install Eclipse Che 7 via Operator Hub Console
+[NOTE] 
+====
+* Patch the Eclipse Che operator for enabling Keycloak tokenExchange. This will be removed in next release of Eclipse che
+[source,bash,subs="attributes+,+macros]
+----
+oc get clusterserviceversions  eclipse-che.v7.0.0 -o yaml | yq w - 'metadata.annotations.containerImage' 'quay.io/dfestal/che-operator:enable-token-exchange' | yq w - 'spec.install.spec.deployments[0].spec.template.spec.containers[0].image' quay.io/dfestal/che-operator:enable-token-exchange | oc apply -f -
+----
+====
 
-NOTE: Section will be updated with screenshots
+Please wait for some time for the operator to get installed, a successful Eclipse Che Operator install will be like:
+
+image::./screenshots/eclipse_che_operator_success.png[]
+
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper subscribeChe
+----
+
+It will take few mins for Eclipse Che and its components to be running, you can check the status using the command `oc get -n che get pods -w `
+
+A successful Eclipse Che install will have the following components
+
+image::./screenshots/eclipse_che_install_success.png[]
 
 ===== Disable waiting for PV
 
-Update the configmap `custom` in `che` namespace with value `CHE_INFRA_KUBERNETES_PVC_WAIT__BOUND: 'false'`
+Update the ConfigMap `custom` in `che` namespace with value `CHE_INFRA_KUBERNETES_PVC_WAIT__BOUND: 'false'`
+
+[source,bash,subs="attributes+,+macros]
+----
+oc scale deployments -n che che --replicas=0 &&\
+oc get cm custom -oyaml | yq w - 'data.CHE_INFRA_KUBERNETES_PVC_WAIT__BOUND' '"false"' | oc apply -f - &&\
+oc scale deployments -n che  che --replicas=1
+----
+
+====== Get Keycloak Password
+
+[source,bash,subs="attributes+,+macros]
+----
+export KEYCLOAK_PASSWORD=$(oc get -n che deployment keycloak -o jsonpath='{.spec.template.spec.containers[*].env[?(@.name=="KEYCLOAK_PASSWORD")].value}')
+----
+
+You can get the Eclipse Che URL using the command `oc get routes -n che che -o yaml | yq r - 'spec.host'`
+You can get the Eclipse Che Keycloak URL using the command `oc get routes -n che keycloak -o yaml | yq r - 'spec.host'`
 
 ===== Cache Eclipse Che Images
 
@@ -212,6 +250,20 @@ oc get groups workshop-students
 [source,bash]
 -----
 ./workshopper configProjects
+-----
+
+=== Create Eclipse Che Users
+
+[source,bash]
+-----
+./workshopper createCheUsers
+-----
+
+=== Create Eclipse Che User Workspaces
+
+[source,bash]
+-----
+./workshopper createWorkspaces
 -----
 
 == Cleanup

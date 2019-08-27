@@ -1,0 +1,13 @@
+#!/bin/bash
+
+subscribeChe::run() {
+ oc apply -n 'che' -f "$(configdir)/che/cr.yaml" 
+}
+
+subscribeChe::usage(){
+  echo "No parameters"
+}
+
+subscribeChe::description(){
+  echo "Create Eclipse Che and its components via CRD"
+}
