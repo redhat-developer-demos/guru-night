@@ -1,0 +1,17 @@
+#!/bin/bash
+
+installPipelines::run() {
+ oc apply -f "$(configdir)/pipelines/subscription.yaml" 
+}
+
+installPipelines::usage(){
+  echo "No parameters"
+}
+
+installPipelines::clean(){
+  echo "WIP"
+}
+
+installPipelines::description(){
+  echo "Install OpenShift Pipelines via OpenShift Pipelines Operator"
+}

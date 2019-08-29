@@ -1,0 +1,29 @@
+apiVersion: operators.coreos.com/v1
+kind: CatalogSourceConfig
+metadata:
+  name: rhd-workshop-che
+  namespace: openshift-marketplace
+spec:
+  targetNamespace: che
+  packages: eclipse-che
+  source: community-operators
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+  name: che-workspaces
+  namespace: che
+spec:
+  targetNamespaces:
+    - che
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: eclipse-che
+  namespace: che
+spec:
+  channel: stable
+  name: eclipse-che
+  source:  rhd-workshop-che
+  sourceNamespace: che

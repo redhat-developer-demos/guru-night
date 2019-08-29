@@ -1,0 +1,13 @@
+#!/bin/bash
+
+createCheCluster::run() {
+ oc apply -n 'che' -f "$(configdir)/che/che-cluster.yaml" 
+}
+
+createCheCluster::usage(){
+  echo "No parameters"
+}
+
+createCheCluster::description(){
+  echo "Create Eclipse Che and its components via CRD"
+}

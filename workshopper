@@ -37,9 +37,23 @@ run(){
         exit 0
     fi
 
+    if $(hasflag --clean -c); then
+        clean ${command:-}
+        exit 0
+    fi
+
     source "$cmd_dir/$command"
 
     eval "${command}::run"
+}
+
+clean(){
+  local command=${1:-}
+  local cmd_dir="$(basedir)/commands"
+  local config_dir="$(basedir)/config"
+
+  source "$cmd_dir/$command"
+  eval "${command}::clean"
 }
 
 display_help() {

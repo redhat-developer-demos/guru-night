@@ -1,0 +1,9 @@
+apiVersion: operators.coreos.com/v1
+kind: CatalogSourceConfig
+metadata:
+  name: rhd-workshop-packages
+  namespace: openshift-marketplace
+spec:
+  targetNamespace: openshift-operators
+  packages: knative-serving-operator,knative-eventing-operator,openshift-pipelines-operator
+  source: community-operators

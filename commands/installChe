@@ -1,11 +1,16 @@
 #!/bin/bash
 
 installChe::run() {
- oc apply -n "openshift-marketplace" -f "$(configdir)/che/install-operator.yaml" 
+ ! oc adm new-project che &&\
+ oc apply -f "$(configdir)/che/che-csc-subscription.yaml" 
 }
 
 installChe::usage(){
   echo "No parameters"
+}
+
+installChe::clean(){
+  echo "WIP"
 }
 
 installChe::description(){

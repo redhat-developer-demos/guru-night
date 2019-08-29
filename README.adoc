@@ -120,6 +120,26 @@ oc -n istio-system get pods -w
 oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.host'
 ----
 
+=== Install Operators
+
+All the components such as Knative Serving, Knative Eventing, Eclipse Che and Tekton will be installed using operators via https://opeatorhub.io[Opeator Hub]. As a first step towards that we need to install the sources from where the components will be installed
+
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper installCatalogSources
+----
+
+[NOTE]
+====
+It will take few minutes to get the operator sources to be configured
+====
+
+Please check if your Operator Catalog looks like below before proceeding to next steps:
+
+Navigate to project `openshift-operators` and navigate to menu:Catalog[Operator Management > Operator Catalogs]
+
+image::./screenshots/operator_catalogs.png[]
+
 ==== Install Eclipse Che
 
 [source,bash,subs="attributes+,+macros]
@@ -143,7 +163,7 @@ image::./screenshots/eclipse_che_operator_success.png[]
 
 [source,bash,subs="attributes+,+macros]
 ----
-./workshopper subscribeChe
+./workshopper createCheCluster
 ----
 
 It will take few mins for Eclipse Che and its components to be running, you can check the status using the command `oc get -n che get pods -w `
@@ -173,52 +193,69 @@ export KEYCLOAK_PASSWORD=$(oc get -n che deployment keycloak -o jsonpath='{.spec
 You can get the Eclipse Che URL using the command `oc get routes -n che che -o yaml | yq r - 'spec.host'`
 You can get the Eclipse Che Keycloak URL using the command `oc get routes -n che keycloak -o yaml | yq r - 'spec.host'`
 
-===== Cache Eclipse Che Images
-
-[source,bash,subs="attributes+,+macros]
-----
-./workshopper cacheImages
-----
-
 ==== Install Knative
 
 We will be using Knative Serving and Knative Eventing Operators to install Knative Serving and Eventing components:
 
 ===== Knative Serving
 
-Login to OpenShift console using the cluster admin credentials.
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper installKnativeServing
+----
 
-* Select Knative Operators via OperatorHub
+[NOTE]
+====
+It will take few minutes for the Knative serving pods to appear please run the following commands to watch the status:
+[source,bash,subs="attributes+,+macros]
+----
+oc -n knative-serving get pods -w
+----
+====
 
-image::./screenshots/select_knative_operators.png[]
+===== Knative Eventing
 
-* Select and Install Knative Serving
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper installKnativeEventing
+----
 
-image::./screenshots/select_kn_serving.png[]
-image::./screenshots/install_knative_serving.png[]
+[NOTE]
+====
+It will take few minutes for the Knative eventing pods to appear please run the following commands to watch the status:
+[source,bash,subs="attributes+,+macros]
+----
+oc -n knative-eventing get pods -w
+----
+====
 
-* Subscribe Knative Serving
+===== OpenShift Pipelines
 
-image::./screenshots/create_knative_serving_sub.png[]
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper installPipelines
+----
 
-image::./screenshots/subscribed_knative_serving.png[]
-
-
-* Select and Install Knative Eventing
-
-image::./screenshots/select_kn_eventing.png[]
-image::./screenshots/install_knative_eventing.png[]
-
-* Subscribe Knative Eventing
-
-image::./screenshots/create_knative_eventing_sub.png[]
-
-image::./screenshots/subscribed_knative_eventing.png[]
+[NOTE]
+====
+It will take few minutes for the OpenShift pipelines pods to appear please run the following commands to watch the status:
+[source,bash,subs="attributes+,+macros]
+----
+oc -n openshift-pipelines get pods -w
+----
+====
 
 == Workshop users, projects and quotas
 
 === Set Environment Variables
 Copy `setEnv.example` to `setEnv.sh`. Edit `setEnv.sh` and update the variables with values to match your environment:
+
+=== Cache frequently used container images
+
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper cacheImages
+----
 
 === Create Workshop Users
 

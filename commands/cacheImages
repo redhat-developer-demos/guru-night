@@ -7,6 +7,14 @@ cacheImages::run() {
  oc process -f "$(configdir)/img-cacher/app.yaml" -p IMAGE=quay.io/openshiftio/kubernetes-image-puller  | oc -n $ns apply -f - 
 }
 
+cacheImages::clean() {
+ local ns='rhd-workshop-infra'
+ oc process -f "$(configdir)/img-cacher/serviceaccount.yaml" | oc delete -n $ns -f -
+ oc delete -n $ns -f "$(configdir)/img-cacher/configmap.yaml"
+ oc process -f "$(configdir)/img-cacher/app.yaml" -p IMAGE=quay.io/openshiftio/kubernetes-image-puller  | oc -n $ns delete -f - 
+}
+
+
 cacheImages::usage(){
   echo "No parameters"
 }

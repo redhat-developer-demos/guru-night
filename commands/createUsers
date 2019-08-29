@@ -5,6 +5,7 @@ createUsers::run(){
 
   echo "Generating Workshop Users"
 
+  ADMIN_PASSWORD=${ADMIN_PASSWORD:-'r3dh4t1!'}
   PASSWORD=${USER_PASSWORD:-'open$hif1!'}
 
   # keep this name avoids setting key in the oc secret command

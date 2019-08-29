@@ -42,3 +42,4 @@ work
 .cache
 **/setEnv.sh
 workspaces.txt
+.kube

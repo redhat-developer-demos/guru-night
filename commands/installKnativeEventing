@@ -1,0 +1,17 @@
+#!/bin/bash
+
+installKnativeEventing::run() {
+ oc apply -f "$(configdir)/knative-eventing/subscription.yaml" 
+}
+
+installKnativeEventing::clean() {
+  echo "WIP"
+}
+
+installKnativeEventing::usage(){
+  echo "No parameters"
+}
+
+installKnativeEventing::description(){
+  echo "Install Knative Eventing via Knative Eventing Operator"
+}

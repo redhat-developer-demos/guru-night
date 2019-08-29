@@ -1,0 +1,13 @@
+#!/bin/bash
+
+installCatalogSources::run() {
+ oc apply -f "$(configdir)/catalog-sources.yaml" 
+}
+
+installCatalogSources::usage(){
+  echo "No parameters"
+}
+
+installCatalogSources::description(){
+  echo "Install Operator Catalog Sources"
+}

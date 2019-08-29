@@ -1,0 +1,17 @@
+#!/bin/bash
+
+installKnativeServing::run() {
+ oc apply -f "$(configdir)/knative-serving/subscription.yaml" 
+}
+
+installKnativeServing::usage(){
+  echo "No parameters"
+}
+
+installKnativeServing::clean() {
+  echo "WIP"
+}
+
+installKnativeServing::description(){
+  echo "Install Knative Serving via Knative Serving Operator"
+}
