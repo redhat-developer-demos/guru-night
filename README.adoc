@@ -157,7 +157,7 @@ oc get clusterserviceversions  eclipse-che.v7.0.0 -o yaml | yq w - 'metadata.ann
 ----
 ====
 
-Please wait for some time for the operator to get installed, a successful Eclipse Che Operator install will be like:
+Navigate to project `che` and navigate to menu:Home[Projects > che], please wait for some time for the operator to get installed, a successful Eclipse Che Operator install will be like:
 
 image::./screenshots/eclipse_che_operator_success.png[]
 
