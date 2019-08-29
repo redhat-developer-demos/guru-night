@@ -26,19 +26,46 @@ createWorkspaces::run(){
      user_prefix=$USER_PREFIX
   fi
   
+  local key_cloak_admin_password=$(oc get -n che deployment keycloak -o jsonpath='{.spec.template.spec.containers[*].env[?(@.name=="KEYCLOAK_PASSWORD")].value}')
+  local che_keycloak_url="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
+  
+  local master_realm_endpoint="$che_keycloak_url/auth/realms/master/protocol/openid-connect/token"
+  local che_realm_endpoint="$che_keycloak_url/auth/realms/che/protocol/openid-connect/token"
+
+
   for ((i=$user_from; i<=user_to ; i++ ));
   do
     local che_user="$user_prefix$i"
     local che_user_password="${WORKSHOP_USER_DEFAULT_PASSWORD}" 
-    local token=$(http --form POST $tokenEndpoint \
-    grant_type="password" client_id="che-public" \
-    username="$che_user" password="$che_user_password" | jq -r '.access_token')
-    # echo "$token"
-    echo "Creating Eclipse Che workspace for user $user_prefix$i"
-    local wsp_url=$(chectl workspace:start \
+    
+    local subject_token=$(oc logout &> /dev/null && \
+      oc login -u "$che_user" -p "$che_user_password" "$OPENSHIFT_API_URL" &> /dev/null &&\
+      oc whoami --show-token)
+      
+    #echo "Subject Token: $subject_token"
+        
+    local access_token=$(http --form POST $che_realm_endpoint \
+    grant_type='urn:ietf:params:oauth:grant-type:token-exchange' \
+    client_id="che-public" \
+    subject_token="$subject_token" subject_issuer='openshift-v4' \
+    subject_token_type='urn:ietf:params:oauth:token-type:access_token' \
+    | jq -r '.access_token')
+
+    if [ ! -z "$access_token" ];
+    then 
+    # echo "Access Token: $access_token"
+
+    # switch back to cluster admin to get routes
+    oc logout &> /dev/null
+    oc login --username="$OPENSHIFT_ADMIN_USER" --password="$OPENSHIFT_ADMIN_USER_PASSWORD" "$OPENSHIFT_API_URL" &> /dev/null
+    
+    echo "Creating Eclipse Che workspace for user $che_user"
+ 
+    local wksp_url=$(chectl workspace:start \
       --devfile="${WORKSHOP_DEVFILE_URL}" \
-      --access-token="$token" 2>&1 | egrep -o 'https?://[^ ")]+' | tail -1 )    
-    echo "$user_prefix$i:$wsp_url" >> $_CURR_DIR/workspaces.txt
+      --access-token="$access_token" &> /dev/null | egrep -o 'https?://[^ ")]+' | tail -1 )    
+    echo "$che_user:$wksp_url" >> $_CURR_DIR/workspaces.txt
+    fi 
   done
 }
 

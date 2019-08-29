@@ -23,35 +23,60 @@ createCheUsers::run(){
      user_prefix=$USER_PREFIX
   fi
   
-  local keycloakAdminPassword=$(oc get -n che deployment keycloak -o jsonpath='{.spec.template.spec.containers[*].env[?(@.name=="KEYCLOAK_PASSWORD")].value}')
-  local cheKeyCloakUrl="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
-  local tokenEndpoint="$cheKeyCloakUrl/auth/realms/master/protocol/openid-connect/token"
-
+  local key_cloak_admin_password=$(oc get -n che deployment keycloak -o jsonpath='{.spec.template.spec.containers[*].env[?(@.name=="KEYCLOAK_PASSWORD")].value}')
+  local che_keycloak_url="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
+  
+  local master_realm_endpoint="$che_keycloak_url/auth/realms/master/protocol/openid-connect/token"
+  local che_realm_endpoint="$che_keycloak_url/auth/realms/che/protocol/openid-connect/token"
 
   for ((i=$user_from; i<=user_to ; i++ ));
   do
-    local token=$(http --form POST $tokenEndpoint \
+    local admin_token=$(http --form POST $master_realm_endpoint \
     grant_type="password" client_id="admin-cli" \
-    username="admin" password="$keycloakAdminPassword" | jq -r '.access_token')
-    # echo "$token"
+    username="admin" password="$key_cloak_admin_password" | jq -r '.access_token')
+    #echo "Keycloak Admin Token : $admin_token"
+
     local che_user="$user_prefix$i"
     local che_user_password="${WORKSHOP_USER_DEFAULT_PASSWORD}" 
-    local che_post_url="$cheKeyCloakUrl/auth/admin/realms/che/users"
-    # echo "Creating user '$user_prefix$i' $NL"
-    http $che_post_url "Authorization: Bearer $token" \
-     email="$user_prefix$i@example.com" \
-     firstName="$user_prefix" \
-     lastName="$i" \
-     enabled='true'\
-     emailVerified='true'\
-     username="$che_user"
-    local userid=$(http --headers --body $che_post_url "Authorization: Bearer $token" username=="$che_user" | jq -r '.[0].id')
-    echo "Created user $user_prefix$i with UserId $userid"
-    http PUT "$che_post_url/$userid/reset-password" "Authorization: Bearer $token" \
-     temporary='false' \
-     type='password' \
-     value="$che_user_password"
+    
+    local subject_token=$(oc logout &> /dev/null && \
+      oc login -u "$che_user" -p "$che_user_password" "$OPENSHIFT_API_URL" &> /dev/null &&\
+      oc whoami --show-token)
+      
+    #echo "Subject Token: $subject_token"
+
+    local access_token=$(http --form POST $che_realm_endpoint \
+    grant_type='urn:ietf:params:oauth:grant-type:token-exchange' \
+    client_id="che-public" \
+    subject_token="$subject_token" subject_issuer='openshift-v4' \
+    subject_token_type='urn:ietf:params:oauth:token-type:access_token' \
+    | jq -r '.access_token')
+
+    # echo "Access Token: $access_token"
+
+    if [ ! -z "$access_token" ];
+    then 
+      echo "Updating user details '$che_user' $NL"
+      
+      local che_post_url="$che_keycloak_url/auth/admin/realms/che/users"
+      local user_id=$(http --headers --body $che_post_url "Authorization: Bearer $admin_token" username=="$che_user" | jq -r '.[0].id')
+      
+      echo "User Id: $user_id"
+
+      local che_put_url="$che_keycloak_url/auth/admin/realms/che/users/$user_id"
+      
+      http PUT $che_put_url "Authorization: Bearer $admin_token" \
+      email="$user_prefix$i@example.com" \
+      firstName="$user_prefix" \
+      lastName="$i" \
+      enabled='true'\
+      emailVerified='true'
+    fi
+    # switch back to cluster admin
+    oc logout &> /dev/null
+    oc login --username="$OPENSHIFT_ADMIN_USER" --password="$OPENSHIFT_ADMIN_USER_PASSWORD" "$OPENSHIFT_API_URL" &> /dev/null
   done
+  
 }
 
 createCheUsers::usage(){

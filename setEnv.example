@@ -10,6 +10,8 @@ export WORK_DIR="$_CURR_DIR/../work"
 export KUBECONFIG=''
 # Openshift user with cluster admin role
 export OPENSHIFT_ADMIN_USER=''
+# Openshift cluster admin user password
+export OPENSHIFT_ADMIN_USER_PASSWORD=''
 # Openshift server API URL
 export OPENSHIFT_API_URL=''
 # OpenShift Domain Suffix 

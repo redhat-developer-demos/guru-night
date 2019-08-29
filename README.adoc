@@ -150,10 +150,19 @@ oc adm new-project che --description="Eclipse Che"
 
 [NOTE] 
 ====
-* Patch the Eclipse Che operator for enabling Keycloak tokenExchange. This will be removed in next release of Eclipse che
+It will take few minutes for the Che operator to appear, please wait for it before doing the next step. You can watch the status of the Eclipse Che operator via 
 [source,bash,subs="attributes+,+macros]
 ----
-oc get clusterserviceversions  eclipse-che.v7.0.0 -o yaml | yq w - 'metadata.annotations.containerImage' 'quay.io/dfestal/che-operator:enable-token-exchange' | yq w - 'spec.install.spec.deployments[0].spec.template.spec.containers[0].image' quay.io/dfestal/che-operator:enable-token-exchange | oc apply -f -
+oc get pods -n che -w
+----
+====
+
+[IMPORTANT]
+====
+Patch the Eclipse Che operator for enabling Keycloak tokenExchange. This will be removed in next release of Eclipse che
+[source,bash,subs="attributes+,+macros]
+----
+oc get clusterserviceversions  -n che eclipse-che.v7.0.0 -o yaml | yq w - 'metadata.annotations.containerImage' 'quay.io/dfestal/che-operator:enable-token-exchange' | yq w - 'spec.install.spec.deployments[0].spec.template.spec.containers[0].image' quay.io/dfestal/che-operator:enable-token-exchange | oc apply -n che -f -
 ----
 ====
 
@@ -179,7 +188,7 @@ Update the ConfigMap `custom` in `che` namespace with value `CHE_INFRA_KUBERNETE
 [source,bash,subs="attributes+,+macros]
 ----
 oc scale deployments -n che che --replicas=0 &&\
-oc get cm custom -oyaml | yq w - 'data.CHE_INFRA_KUBERNETES_PVC_WAIT__BOUND' '"false"' | oc apply -f - &&\
+oc get cm -n che custom -oyaml | yq w - 'data.CHE_INFRA_KUBERNETES_PVC_WAIT__BOUND' '"false"' | oc apply -n che -f - &&\
 oc scale deployments -n che  che --replicas=1
 ----
 
@@ -302,6 +311,8 @@ oc get groups workshop-students
 -----
 ./workshopper createWorkspaces
 -----
+
+It will take sometime to create the workspaces, all the workspaces created will be logged in `$PROJECT_HOME/workspace.txt` file.
 
 == Cleanup
 
