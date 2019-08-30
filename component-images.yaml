@@ -50,4 +50,5 @@ items:
           requests:
             cpu: "0.5"
             memory: "512m"
+        command: ["tail","-f","/dev/null"]
         workingDir:  /opt/developer
