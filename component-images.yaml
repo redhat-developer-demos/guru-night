@@ -1,49 +1,54 @@
 apiVersion: v1
 kind: List
 items:
-  - apiVersion: v1
-    kind: Pod
-    metadata:
-      name: tutorial-tools
-      labels:
-        app.kubernetes.io/name: tutorial-tools
-    spec:
-      containers:
-      - name: tutorial-tools
-        image: quay.io/rhdevelopers/tutorial-tools:0.0.1
-        imagePullPolicy: IfNotPresent
-        env:
-         - name: MAVEN_MIRROR_URL
-           value: 'http://nexus.rhd-workshop-infra:8081/nexus/content/groups/public'
-        workingDir: /opt/developer
-        resources:
-          limits: 
-            cpu: 4
-            memory: 6Gi
-          requests:
-            cpu: 2
-            memory: 4Gi
-        command:
-          - '/usr/local/bin/run.sh'
-        args:
-          - 'sleep'
-          - 'infinity'
-  - apiVersion: v1
-    kind: Pod
-    metadata:
-      name: tutorial-clients
-      labels:
-        app.kubernetes.io/name: clients
-    spec:
-      containers:
-      - name: clients
-        image: 'quay.io/rhdevelopers/clients:0.0.1'
-        imagePullPolicy: IfNotPresent
-        resources:
-          limits: 
-            cpu: "1"
-            memory: "1Gi"
-          requests:
-            cpu: "0.5"
-            memory: "512m"
-        workingDir:  /opt/developer
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: tutorial-tools
+    labels:
+      app: tutorial-tools
+  spec:
+    containers:
+    - name: tutorial-tools
+      image: quay.io/rhdevelopers/tutorial-tools:0.0.1
+      imagePullPolicy: IfNotPresent
+      env:
+        - name: MAVEN_MIRROR_URL
+          value: 'http://nexus.rhd-workshop-infra:8081/nexus/content/groups/public'
+      workingDir: /opt/developer
+      resources:
+        limits: 
+          cpu: 4
+          memory: 6Gi
+        requests:
+          cpu: 2
+          memory: 4Gi
+      command:
+        - '/usr/local/bin/run.sh'
+      args:
+        - 'sleep'
+        - 'infinity'
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: tutorial-clients
+    labels:
+      app: tutorial-clients
+  spec:
+    containers:
+    - name: tutorial-clients
+      image: 'quay.io/rhdevelopers/clients:0.0.1'
+      imagePullPolicy: IfNotPresent
+      resources:
+        limits: 
+          cpu: "1"
+          memory: "1Gi"
+        requests:
+          cpu: "0.5"
+          memory: "512m"
+      command:
+        - 'tail'
+      args:
+       - '-f'
+       - '/dev/null'
+      workingDir:  /opt/developer

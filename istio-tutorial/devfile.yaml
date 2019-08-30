@@ -19,4 +19,4 @@ components:
     mountSources: true
     reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
     selector:
-      app.kubernetes.io/name: tutorial-tools
+      app: tutorial-tools

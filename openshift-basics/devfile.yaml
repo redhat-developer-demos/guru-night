@@ -6,7 +6,5 @@ components:
     type: kubernetes
     mountSources: false
     reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
-    entrypoints:        
-      - parentSelector:
-          app.kubernetes.io/name: clients
-        command: ['tail','-f','/dev/null']
+    selector:
+      app: tutorial-clients
