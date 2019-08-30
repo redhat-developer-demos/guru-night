@@ -20,5 +20,3 @@ components:
     reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
     selector:
       app.kubernetes.io/name: tutorial-tools
-      app.kubernetes.io/component: workshop
-      app.kubernetes.io/part-of: rhd-workshops 

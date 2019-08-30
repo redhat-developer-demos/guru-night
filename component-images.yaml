@@ -7,8 +7,6 @@ items:
       name: tutorial-tools
       labels:
         app.kubernetes.io/name: tutorial-tools
-        app.kubernetes.io/component: workshop
-        app.kubernetes.io/part-of: rhd-workshops
     spec:
       containers:
       - name: tutorial-tools
@@ -36,8 +34,6 @@ items:
       name: tutorial-clients
       labels:
         app.kubernetes.io/name: clients
-        app.kubernetes.io/component: workshop
-        app.kubernetes.io/part-of: rhd-workshops
     spec:
       containers:
       - name: clients
@@ -50,5 +46,4 @@ items:
           requests:
             cpu: "0.5"
             memory: "512m"
-        command: ["tail","-f","/dev/null"]
         workingDir:  /opt/developer

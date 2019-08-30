@@ -1,0 +1,12 @@
+apiVersion: 1.0.0
+metadata:
+  name: intro-k8s-containers
+components:
+  - alias: clients
+    type: kubernetes
+    mountSources: false
+    reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
+    entrypoints:        
+      - parentSelector:
+          app.kubernetes.io/name: clients
+        command: ['tail','-f','/dev/null']
