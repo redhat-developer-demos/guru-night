@@ -62,7 +62,7 @@ items:
     containers:
     - name: container-tools
       image: 'quay.io/rhdevelopers/container-tools:0.0.1'
-      imagePullPolicy: IfNotPresent
+      imagePullPolicy: Always
       resources:
         limits: 
           cpu: "1"
