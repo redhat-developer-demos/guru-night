@@ -40,7 +40,7 @@ dev-site.yml
 htpasswd
 work
 .cache
-**/setEnv.sh
+**/setEnv*.sh
 workspaces.txt
 .kube
 
