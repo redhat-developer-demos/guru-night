@@ -1,15 +1,27 @@
 apiVersion: 1.0.0
 metadata:
-  name: intro-k8s-containers
+  name: linux-container-world-apps
 projects:
   - name: linux-container-world-apps
     source:
       type: git
-      location: https://github.com/redhat-developer-demos/linux-container-world-apps
+      location: 'https://github.com/redhat-developer-demos/linux-container-world-apps.git'
 components:
-  - alias: clients
+  - id: redhat/vscode-yaml/latest
+    type: chePlugin
+  - id: redhat/vscode-xml/latest
+    type: chePlugin
+  - id: redhat/java8/latest
+    type: chePlugin
+  # Tool that allows to build java application including Quarkus
+  - alias: tools
     type: kubernetes
-    mountSources: false
+    mountSources: true
     reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
     selector:
-      app: tutorial-clients
+      app: tutorial-tools
+  - alias: container-tools
+    type: kubernetes
+    reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
+    selector:
+      app: container-tools
