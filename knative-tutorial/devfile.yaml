@@ -20,4 +20,9 @@ components:
     reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
     selector:
       app: tutorial-tools
+  - alias: container-tools
+    type: kubernetes
+    reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
+    selector:
+      app: container-tools
 
