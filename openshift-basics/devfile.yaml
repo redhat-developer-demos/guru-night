@@ -1,6 +1,11 @@
 apiVersion: 1.0.0
 metadata:
   name: intro-k8s-containers
+projects:
+  - name: linux-container-world-apps
+    source:
+      type: git
+      location: https://github.com/redhat-developer-demos/linux-container-world-apps
 components:
   - alias: clients
     type: kubernetes
