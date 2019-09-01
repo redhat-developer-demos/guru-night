@@ -15,7 +15,7 @@ items:
       env:
         - name: MAVEN_MIRROR_URL
           value: 'http://nexus.rhd-workshop-infra:8081/nexus/content/groups/public'
-      workingDir: /opt/developer
+      workingDir:  /projects
       resources:
         limits: 
           cpu: 4
@@ -51,4 +51,28 @@ items:
       args:
        - '-f'
        - '/dev/null'
-      workingDir:  /opt/developer
+      workingDir:  /projects
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: container-tools
+    labels:
+      app: container-tools
+  spec:
+    containers:
+    - name: container-tools
+      image: 'quay.io/rhdevelopers/container-tools:0.0.1'
+      imagePullPolicy: IfNotPresent
+      resources:
+        limits: 
+          cpu: "1"
+          memory: "1Gi"
+        requests:
+          cpu: "0.5"
+          memory: "512m"
+      command:
+        - 'tail'
+      args:
+       - '-f'
+       - '/dev/null'
+      workingDir:  /projects
