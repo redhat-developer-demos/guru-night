@@ -3,17 +3,34 @@
   "version": "0.0.1",
   "description": "The Guru workshop setup scripts",
   "main": "bin/setup.js",
-  "repository": "git@github.com:redhat-developer-demos/guru-night.git",
-  "author": "Kamesh Sampath <kamesh.sampath@hotmail.com>",
-  "license": "ASL-v2",
-  "devDependencies": {
-    "lodash": "^4.17.11",
-    "shelljs": "^0.8.3",
-    "yargs": "^13.2.4",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/redhat-developer-demos/guru-night.git"
+  },
+  "author": {"email": "kamesh.sampath@hotmail.com","name": "Kamesh Sampath","url": "https://twitter.com/@kamesh_sampath"},
+  "dependencies": {
     "@antora/cli": "2.0.0",
     "@antora/site-generator-default": "2.0.0",
-    "gulp": "3.9.1",
-    "gulp-connect": "5.6.1",
+    "@babel/cli": "^7.5.5",
+    "@babel/core": "^7.5.5",
+    "@babel/polyfill": "^7.4.4",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/register": "^7.5.5",
+    "browser-sync": "^2.26.7",
+    "fs-extra": "^8.1.0",
+    "gulp": "^4.0.0",
     "yaml-js": "^0.2.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "gulp",
+    "clean": "gulp clean",
+    "workshop": "gulp workshopSite"
+  },
+  "license": "Apache-2.0",
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   }
 }

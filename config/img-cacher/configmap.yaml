@@ -21,8 +21,6 @@ data:
     preference-v1=quay.io/rhdevelopers/istio-tutorial-preference:v1;
     recommendation-v1=quay.io/rhdevelopers/istio-tutorial-recommendation:v1;
     recommendation-v2=quay.io/rhdevelopers/istio-tutorial-recommendation:v2;
-    recommendation-v2-timeout=quay.io/rhdevelopers/istio-tutorial-recommendation:v2-timeout;
-    recommendation-v3=quay.io/rhdevelopers/istio-tutorial-recommendation:v3;
     greeter-quarkus=quay.io/rhdevelopers/knative-tutorial-greeter:quarkus;
     prime-generator=quay.io/rhdevelopers/prime-generator:v27-quarkus;
   DAEMONSET_NAME: "kubernetes-image-puller"

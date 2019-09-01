@@ -1,7 +1,14 @@
-#!/bin/bash 
+#!/bin/bash
 
-[[ -d gh-pages ]] && rm -rf gh-pages
+  # Check if pre-req commands exists
+  hash yq
+  hash antora
 
-[[ -d .cache ]] && rm -rf .cache
+_CURR_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
+rm -rf ./gh-pages .cache
 
-docker run -it --rm -v `pwd`:/antora  antora/antora site.yml --stacktrace
+yq w workshop.yaml -s workshop-attributes.yaml > workshop-site.yaml
+
+antora --pull --stacktrace  workshop-site.yaml
+
+open gh-pages/index.html
