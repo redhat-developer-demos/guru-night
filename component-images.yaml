@@ -75,4 +75,7 @@ items:
       args:
        - '-f'
        - '/dev/null'
+      volumeMounts:
+        - name: projects
+          path: /projects
       workingDir:  /projects
