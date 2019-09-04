@@ -52,4 +52,4 @@ workshop-attributes.yaml
 workshop-site.yaml
 **/.factorypath
 *.old
-tmp*
+**/tmp.*

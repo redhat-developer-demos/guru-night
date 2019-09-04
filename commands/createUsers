@@ -46,8 +46,8 @@ createUsers::run(){
   htpasswd -b $PASSWORD_FILE $ADMIN_USER_NAME $ADMIN_PASSWORD
 
   # Create user secret in OpenShift
-  ! oc -n openshift-config delete secret htpass-secret
-  oc -n openshift-config create secret generic htpass-secret --from-file="$PASSWORD_FILE"
+  ! oc -n openshift-config delete secret htpasswdidp-secret
+  oc -n openshift-config create secret generic htpasswdidp-secret --from-file="htpasswd=$PASSWORD_FILE"
 
   #TODO delete the existing OAuth named htpassidp
   # Add the users to OpenShift OAuth

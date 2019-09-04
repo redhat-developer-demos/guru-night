@@ -1,0 +1,50 @@
+#!/bin/bash
+
+killProjects::run(){
+  local projects=$(readopt -n --projects)
+  if [ -z $projects ]; then 
+     projects=($PROJECTS)
+  fi
+  
+
+  local user_from=$(readopt -f --from)
+  if [ -z $user_from ]; then 
+     user_from=$USERS_FROM
+  fi
+
+  local user_to=$(readopt -t --to)
+  if [ -z $user_to ]; then 
+     user_to=$USERS_TO
+  fi
+  
+  local user_prefix=$(readopt -p --prefix)
+   if [ -z $user_prefix ]; then 
+     user_prefix=$USER_PREFIX
+  fi
+
+  for ((i=$user_from; i<=user_to ; i++ ));
+  do
+    for p in "${projects[@]}" 
+    do
+      openshiftProject=$(printf '%s-%d' $p $i)
+      printf "Deleting OpenShift Project $openshiftProject \n"
+      oc delete project $openshiftProject
+      kubectl get namespace $openshiftProject -o json | jq .spec.finalizers=[] > $WORK_DIR/tmp.json
+      export TOKEN=$(oc whoami -t)
+      curl -k -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -X PUT --data-binary @"$WORK_DIR/tmp.json" "$OPENSHIFT_API_URL/api/v1/namespaces/$openshiftProject/finalize"
+    done
+  done
+}
+
+killProjects::usage(){
+   cat <<EOT
+  -f --from <user count from>    The starting user count e.g. 1
+  -t --to <user count to>        The ending user count e.g. 10
+  -p --prefix <userprefix>       The username prefix e.g. user
+  -n --projects <userpojects>    The space user project name prefixes e.g. tutorial
+EOT
+}
+
+killProjects::description(){
+  echo "Force deletes OpenShift Projects"
+}

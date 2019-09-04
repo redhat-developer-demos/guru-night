@@ -34,7 +34,7 @@ configProjects::run(){
       openshiftUser=$(printf "$user_prefix%d" $i)
       openshiftProject=$(printf '%s-%d' $p $i)
       printf "Creating and Configuring OpenShift Project $openshiftProject for user $openshiftUser \n"
-      oc new-project "$openshiftProject" --skip-config-write='false'>&- && \
+      ! oc new-project "$openshiftProject" --skip-config-write='false'>&- && \
       oc policy add-role-to-user admin "$openshiftUser" -n "$openshiftProject" && \
       oc adm policy add-scc-to-user privileged -z default -n "$openshiftProject" && \
       oc adm policy add-scc-to-user anyuid -z default -n  "$openshiftProject" && \
