@@ -1,4 +1,5 @@
 = Red Hat Developers Workshop Guide
+:experimental:
 
 How to setup the workshop using OpenShift4 
 
@@ -23,7 +24,7 @@ Create a OCP4 cluster by visiting try.openshift.com and downloading the openshif
 
 Follow the prompts for your SSH key, your favorite AWS Region, your Route53 domain, your PullSecret (visible at try.openshift.com), etc. This creates a directory called "june22v2" and inside it a file called install-config.yaml
 
-2) Edit this file to override your AWS Instance Types (the default ones are tiny), here is an example snippet
+2) Edit this file to override your aws/azure/gcp Instance Types (the default ones are tiny), here is an example snippet
 
 ----
   name: worker
@@ -67,7 +68,7 @@ oc adm new-project rhd-workshop-infra
 oc new-app -n rhd-workshop-infra sonatype/nexus
 ----
 
-==== Install Istio 
+==== Delete quotas
 
 [IMPORTANT]
 =====
@@ -87,38 +88,8 @@ oc delete clusterresourcequotas.quota.openshift.io clusterquota-opentlc-mgr
 oc get clusterresourcequotas.quota.openshift.io
 ----
 
-Istio is installed using the https://maistra.io[Maistra] operators. The instructions below are stripped down version of https://maistra.io/docs/getting_started/install/[Install on OCP]  and targetted only for OCP4.
-
-[source,bash,subs="attributes+,+macros"]
-----
-oc adm new-project istio-operator
-oc apply -n istio-operator -f https://raw.githubusercontent.com/Maistra/istio-operator/maistra-0.11/deploy/maistra-operator.yaml
-# verify deployment to see if the pods are created
-oc get pods -n istio-operator -l name=istio-operator -w 
-----
-
-===== Deploy Control Plane
-
-[source,bash,subs="attributes+,+macros"]
-----
-oc adm new-project istio-system
-oc apply -n istio-system -f config/basic-install.yaml
-----
-
-NOTE: It will take sometime for Istio to be deployed completely
-
-Wait for all the Istio Pods to be available
-[source,bash,subs="attributes+,+macros"]
-----
-oc -n istio-system get pods -w
-----
-
-===== Get all Service URLS of Istio Services
-
-[source,bash,subs="attributes+,+macros]
-----
-oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.host'
-----
+=== Set Environment Variables
+Copy `setEnv.example` to `setEnv.sh`. Edit `setEnv.sh` and update the variables with values to match your environment.
 
 === Install Operators
 
@@ -162,7 +133,7 @@ oc get pods -n che -w
 Patch the Eclipse Che operator for enabling Keycloak tokenExchange. This will be removed in next release of Eclipse che
 [source,bash,subs="attributes+,+macros]
 ----
-oc get clusterserviceversions  -n che eclipse-che.v7.0.0 -o yaml | yq w - 'metadata.annotations.containerImage' 'quay.io/dfestal/che-operator:enable-token-exchange' | yq w - 'spec.install.spec.deployments[0].spec.template.spec.containers[0].image' quay.io/dfestal/che-operator:enable-token-exchange | oc apply -n che -f -
+oc get clusterserviceversions  -n che eclipse-che.v7.1.0 -o yaml | yq w - 'metadata.annotations.containerImage' 'quay.io/dfestal/che-operator:enable-token-exchange' | yq w - 'spec.install.spec.deployments[0].spec.template.spec.containers[0].image' quay.io/dfestal/che-operator:enable-token-exchange | oc apply -n che -f -
 ----
 ====
 
@@ -175,22 +146,11 @@ image::./screenshots/eclipse_che_operator_success.png[]
 ./workshopper createCheCluster
 ----
 
-It will take few mins for Eclipse Che and its components to be running, you can check the status using the command `oc get -n che get pods -w `
+It will take few mins for Eclipse Che and its components to be running, you can check the status using the command `oc get -n che pods -w `
 
 A successful Eclipse Che install will have the following components
 
 image::./screenshots/eclipse_che_install_success.png[]
-
-===== Disable waiting for PV
-
-Update the ConfigMap `custom` in `che` namespace with value `CHE_INFRA_KUBERNETES_PVC_WAIT__BOUND: 'false'`
-
-[source,bash,subs="attributes+,+macros]
-----
-oc scale deployments -n che che --replicas=0 &&\
-oc get cm -n che custom -oyaml | yq w - 'data.CHE_INFRA_KUBERNETES_PVC_WAIT__BOUND' '"false"' | oc apply -n che -f - &&\
-oc scale deployments -n che  che --replicas=1
-----
 
 ====== Get Keycloak Password
 
@@ -199,8 +159,63 @@ oc scale deployments -n che  che --replicas=1
 export KEYCLOAK_PASSWORD=$(oc get -n che deployment keycloak -o jsonpath='{.spec.template.spec.containers[*].env[?(@.name=="KEYCLOAK_PASSWORD")].value}')
 ----
 
-You can get the Eclipse Che URL using the command `oc get routes -n che che -o yaml | yq r - 'spec.host'`
-You can get the Eclipse Che Keycloak URL using the command `oc get routes -n che keycloak -o yaml | yq r - 'spec.host'`
+====== Get Eclipse Che URL
+
+[source,bash,subs="attributes+,+macros]
+----
+oc get routes -n che che -o yaml | yq r - 'spec.host'
+----
+
+====== Get Keycloak URL
+
+[source,bash,subs="attributes+,+macros]
+----
+oc get routes -n che keycloak -o yaml | yq r - 'spec.host'
+----
+
+The following section are optional based on what components that might be needed for the workshop.
+
+==== Install Istio
+
+Istio will will be installed using Red Hat Servicemesh Operator, the following section details on how to install using operator and oc CLI.
+
+[source,bash,subs="attributes+,+macros"]
+----
+#Create Elastic Search Subscription 
+oc create -f  https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/elastic_search_subscription.yaml
+#Create Jaeger Subscription
+oc create -f https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/jager_subscription.yaml
+#Create Kiali Subscription
+https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/kiali_subscription.yaml
+#Create Servicemesh Subscription
+oc create -f https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/servicemesh_subscription.yaml
+----
+
+====== Deploy Control Plane
+
+Once the operators are available run the following command to create the Red Hat servicemesh subscription which will install all Istio components:
+
+[source,bash,subs="attributes+,+macros"]
+----
+oc adm new-project istio-system
+# create Red Hat servicemesh subscription
+oc create -n istio-system -f https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/control_plane_cr.yaml
+----
+
+NOTE: It will take sometime for Istio to be deployed completely
+
+Wait for all the Istio Pods to be available
+[source,bash,subs="attributes+,+macros"]
+----
+oc -n istio-system get pods -w
+----
+
+===== Get all Service URLS of Istio Services
+
+[source,bash,subs="attributes+,+macros]
+----
+oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.host'
+----
 
 ==== Install Knative
 
@@ -255,9 +270,6 @@ oc -n openshift-pipelines get pods -w
 ====
 
 == Workshop users, projects and quotas
-
-=== Set Environment Variables
-Copy `setEnv.example` to `setEnv.sh`. Edit `setEnv.sh` and update the variables with values to match your environment:
 
 === Cache frequently used container images
 

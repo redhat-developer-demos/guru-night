@@ -2,10 +2,11 @@
 
 configProjects::run(){
   
-  echo "Apply the Red Hat Developers Workshop Project Template"
-  oc apply -f "$(configdir)/project-request-template.yaml" -n openshift-config
-  echo "Apply Hat Developers Workshop Project Template"
-  oc apply -f "$(configdir)/project-request-config.yaml" -n openshift-config
+  # TODO this needs to be optimized
+  # echo "Apply the Red Hat Developers Workshop Project Template"
+  # oc apply -f "$(configdir)/project-request-template.yaml" -n openshift-config
+  # echo "Apply Hat Developers Workshop Project Template"
+  # oc apply -f "$(configdir)/project-request-config.yaml" -n openshift-config
 
   local projects=$(readopt -n --projects)
   if [ -z $projects ]; then 
@@ -38,9 +39,9 @@ configProjects::run(){
       oc policy add-role-to-user admin "$openshiftUser" -n "$openshiftProject" && \
       oc adm policy add-scc-to-user privileged -z default -n "$openshiftProject" && \
       oc adm policy add-scc-to-user anyuid -z default -n  "$openshiftProject" && \
-      oc policy add-role-to-user view "$openshiftUser" -n "istio-system"
+      ! oc policy add-role-to-user view "$openshiftUser" -n "istio-system"
       # added via project template
-      # oc create -f "$(configdir)/workshop-student-project-role.yaml" -n "$openshiftProject" && \
+      oc create -f "$(configdir)/workshop-student-project-role.yaml" -n "$openshiftProject" && \
       # TODO need to be there as project template is not working
      oc policy add-role-to-user workshop-student-project "$openshiftUser" --role-namespace="$openshiftProject" -n "$openshiftProject"
     done

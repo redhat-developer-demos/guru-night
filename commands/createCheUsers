@@ -24,7 +24,7 @@ createCheUsers::run(){
   fi
   
   local key_cloak_admin_password=$(oc get -n che deployment keycloak -o jsonpath='{.spec.template.spec.containers[*].env[?(@.name=="KEYCLOAK_PASSWORD")].value}')
-  local che_keycloak_url="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
+  local che_keycloak_url="https://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
   
   local master_realm_endpoint="$che_keycloak_url/auth/realms/master/protocol/openid-connect/token"
   local che_realm_endpoint="$che_keycloak_url/auth/realms/che/protocol/openid-connect/token"
@@ -34,7 +34,7 @@ createCheUsers::run(){
     local admin_token=$(http --form POST $master_realm_endpoint \
     grant_type="password" client_id="admin-cli" \
     username="admin" password="$key_cloak_admin_password" | jq -r '.access_token')
-    #echo "Keycloak Admin Token : $admin_token"
+    # echo "Keycloak Admin Token : $admin_token"
 
     local che_user="$user_prefix$i"
     local che_user_password="${WORKSHOP_USER_DEFAULT_PASSWORD}" 
