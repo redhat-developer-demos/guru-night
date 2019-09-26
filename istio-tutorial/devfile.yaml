@@ -6,6 +6,7 @@ projects:
     source:
       type: git
       location: 'https://github.com/redhat-developer-demos/istio-tutorial.git'
+      branch: "1.1.x"
 components:
   - id: redhat/vscode-yaml/latest
     type: chePlugin
@@ -15,6 +16,7 @@ components:
     type: chePlugin
   - alias: container-tools
     type: kubernetes
+    mountSources: true
     reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
     selector:
       app: container-tools

@@ -7,3 +7,6 @@ rules:
   - apiGroups: [""]
     resources: ["configmaps","services"]
     verbs: ["get", "view"]
+  - apiGroups: ["networking.istio.io"]
+    resources: ["serviceentries","destinationrules"]
+    verbs: ["get", "view","list"]
