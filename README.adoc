@@ -217,6 +217,11 @@ oc -n istio-system get pods -w
 oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.host'
 ----
 
+===== Create Istio service member roll
+----
+./workshopper addProjectsToServicemesh
+----
+
 ==== Install Knative
 
 We will be using Knative Serving and Knative Eventing Operators to install Knative Serving and Eventing components:

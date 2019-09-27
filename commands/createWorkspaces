@@ -63,8 +63,9 @@ createWorkspaces::run(){
  
     local wksp_url=$(chectl workspace:start \
       --devfile="${WORKSHOP_DEVFILE_URL}" \
-      --access-token="$access_token" &> /dev/null | egrep -o 'https?://[^ ")]+' | tail -1 )    
-    echo "$che_user:$wksp_url" >> $_CURR_DIR/workspaces.txt
+      --access-token="$access_token" &> /dev/null)
+    # http --body $wksp_url 
+    # echo "$che_user:$wksp_url" >> $_CURR_DIR/workspaces.txt
     fi 
   done
 }

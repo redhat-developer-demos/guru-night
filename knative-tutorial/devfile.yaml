@@ -1,6 +1,8 @@
 apiVersion: 1.0.0
 metadata:
   name: knative-workshop
+attributes:
+  persistVolumes: 'false'
 projects:
   - name: knative-tutorial
     source:
@@ -15,6 +17,7 @@ components:
     type: chePlugin
   - alias: container-tools
     type: kubernetes
+    mountSources: true
     reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
     selector:
       app: container-tools
