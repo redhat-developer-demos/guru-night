@@ -15,6 +15,7 @@ items:
       env:
         - name: MAVEN_MIRROR_URL
           value: 'http://nexus.rhd-workshop-infra:8081/nexus/content/groups/public'
+      workingDir:  /projects
       resources:
         limits: 
           cpu: 4
@@ -45,6 +46,7 @@ items:
         requests:
           cpu: "0.5"
           memory: "512m"
+      workingDir:  /projects
 - apiVersion: v1
   kind: Pod
   metadata:
@@ -63,3 +65,4 @@ items:
         requests:
           cpu: "0.5"
           memory: "512m"
+      workingDir:  /projects
