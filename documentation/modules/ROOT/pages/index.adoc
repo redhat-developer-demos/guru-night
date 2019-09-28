@@ -19,5 +19,6 @@
 
 [.tile]
 .xref:knative-tutorial-basics:ROOT:index.adoc[Serverless with Knative]
+* xref:knative-tutorial-basics:ROOT:01-setup.adoc#kubernetes-cluster[Setup]
 * xref:knative-tutorial-basics:ROOT:02-basic-fundas.adoc[Basics and Fundamentals]
 * xref:knative-tutorial-basics:ROOT:04-scaling.adoc[Scaling]
