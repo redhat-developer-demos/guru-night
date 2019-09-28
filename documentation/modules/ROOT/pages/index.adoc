@@ -4,19 +4,20 @@
 :!numbered:
 
 [.tiles.browse]
-== {title}
+== Browse modules
 
 [.tile]
-.xref:openshift-basics:ROOT:index.adoc[OpenShift Basics]
+.xref:openshift-basics:ROOT:index.adoc[Kubernetes Basics]
 * xref:openshift-basics:ROOT:index.adoc[Introduction]
 
 [.tile]
 .xref:istio-tutorial:ROOT:index.adoc[Servicemesh with Istio]
-* xref:istio-tutorial:workshop:1setup.adoc[Setup]
-* xref:istio-tutorial:workshop:2deploy-microservices.adoc[Deploy Microservices]
+* xref:istio-tutorial:ROOT:2deploy-microservices.adoc[Deploy Microservices]
+* xref:istio-tutorial:ROOT:3monitoring-tracing.adoc[Observability]
+* xref:istio-tutorial:ROOT:4simple-routerules.adoc[Traffic Routing]
+
 
 [.tile]
 .xref:knative-tutorial-basics:ROOT:index.adoc[Serverless with Knative]
-* xref:knative-tutorial-basics:ROOT:01-setup.adoc[Setup]
 * xref:knative-tutorial-basics:ROOT:02-basic-fundas.adoc[Basics and Fundamentals]
-
+* xref:knative-tutorial-basics:ROOT:04-scaling.adoc[Scaling]

@@ -1,5 +1,5 @@
-name: summit-guru-night
-title: Summit Guru Night
+name: guru-night
+title: Guru Night
 version: 1.0.0
 nav:
   - modules/ROOT/nav.adoc
