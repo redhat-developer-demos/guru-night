@@ -46,11 +46,6 @@ items:
         requests:
           cpu: "0.5"
           memory: "512m"
-      command:
-        - 'tail'
-      args:
-       - '-f'
-       - '/dev/null'
       workingDir:  /projects
 - apiVersion: v1
   kind: Pod
@@ -70,9 +65,4 @@ items:
         requests:
           cpu: "0.5"
           memory: "512m"
-      command:
-        - 'tail'
-      args:
-       - '-f'
-       - '/dev/null'
       workingDir:  /projects
