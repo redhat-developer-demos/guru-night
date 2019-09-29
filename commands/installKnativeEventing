@@ -1,6 +1,7 @@
 #!/bin/bash
 
 installKnativeEventing::run() {
+! oc adm new-project knative-eventing
  oc apply -f "$(configdir)/knative-eventing/subscription.yaml" 
 }
 

@@ -181,34 +181,51 @@ Istio will will be installed using Red Hat Servicemesh Operator, the following s
 
 [source,bash,subs="attributes+,+macros"]
 ----
-#Create Elastic Search Subscription 
-oc create -f  https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/elastic_search_subscription.yaml
-#Create Jaeger Subscription
-oc create -f https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/jager_subscription.yaml
-#Create Kiali Subscription
-https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/kiali_subscription.yaml
-#Create Servicemesh Subscription
-oc create -f https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/servicemesh_subscription.yaml
+./workshopper installServicemesh
 ----
 
-====== Deploy Control Plane
-
-Once the operators are available run the following command to create the Red Hat servicemesh subscription which will install all Istio components:
+It will take for some time for Servicemesh and its dependencies to be resolve, you can watch the status via:
 
 [source,bash,subs="attributes+,+macros"]
 ----
-oc adm new-project istio-system
-# create Red Hat servicemesh subscription
-oc create -n istio-system -f https://gist.githubusercontent.com/kameshsampath/3983b27dc7a8b7145d1b1c7a03ba6367/raw/38b0467943e3f38da2b9c4390a510f8bf305dc2b/control_plane_cr.yaml
+watch 'oc get csv -n openshift-operators'
 ----
 
-NOTE: It will take sometime for Istio to be deployed completely
+A successful install will show an output like 
 
-Wait for all the Istio Pods to be available
+[source,bash]
+----
+NAME                                         DISPLAY                          VERSION
+           REPLACES   PHASE
+elasticsearch-operator.4.1.18-201909201915   Elasticsearch Operator           4.1.18-2019
+09201915              Succeeded
+jaeger-operator.v1.13.1                      Jaeger Operator                  1.13.1
+                      Succeeded
+kiali-operator.v1.0.5                        Kiali Operator                   1.0.5
+                      Succeeded
+servicemeshoperator.v1.0.0                   Red Hat OpenShift Service Mesh   1.0.0
+                      Succeeded
+----
+
+IMPORTANT: Operator versions may vary from your output based on the latest available csv
+
+====== Deploy Control Plane
+
+[source,bash,subs="attributes+,+macros"]
+----
+./workshopper createServicemesh
+----
+
+NOTE: It will take sometime for Istio to be deployed completely, wait for all the Istio Pods to be available:
 [source,bash,subs="attributes+,+macros"]
 ----
 oc -n istio-system get pods -w
 ----
+
+[NOTE]
+====
+If you see no pods getting created for long time, try running the command to `oc get svc -n istio-system` to see if the Servicemesh operators are copied to `istio-system` namespace. If you see them copied or copying wait for the copy to be done and run the command `./workshopper createServicemesh` again.
+====
 
 ===== Get all Service URLS of Istio Services
 
@@ -220,6 +237,11 @@ oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.h
 ===== Create Istio service member roll
 ----
 ./workshopper addProjectsToServicemesh
+----
+
+===== Verify projects added Istio service member roll
+----
+oc get -n istio-system ServiceMeshMemberRoll -o yaml
 ----
 
 ==== Install Knative
@@ -308,13 +330,6 @@ You can check the group users via command, which should basically list all works
 oc get groups workshop-students
 ----
 
-=== Create Workshop Projects
-
-[source,bash]
------
-./workshopper configProjects
------
-
 === Create Eclipse Che Users
 
 [source,bash]
@@ -330,6 +345,24 @@ oc get groups workshop-students
 -----
 
 It will take sometime to create the workspaces, all the workspaces created will be logged in `$PROJECT_HOME/workspace.txt` file.
+
+=== Create and configure Workshop Projects
+
+==== Create project
+
+[source,bash]
+-----
+./workshopper configProjects
+-----
+
+==== Annotate project
+
+Annotate the projects with right OpenShift user to allow resource quotas to be applied
+
+[source,bash]
+-----
+./workshopper annotateProjects
+-----
 
 == Cleanup
 

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+createServicemesh::run() {
+ ! oc adm new-project istio-system
+ oc apply -n 'istio-system' -f "$(configdir)/servicemesh/control-plane.yaml" 
+}
+
+createServicemesh::usage(){
+  echo "No parameters"
+}
+
+createServicemesh::description(){
+  echo "Create Eclipse Che and its components via CRD"
+}

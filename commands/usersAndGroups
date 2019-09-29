@@ -26,7 +26,8 @@ usersAndGroups::run(){
   for ((i=$user_from; i<=user_to ; i++ ));
   do
     local openShiftUser=$(printf "$USER_PREFIX%d" $i)
-    yq w "$(configdir)/workshop-student-quota.yaml" 'metadata.name' "limit-$openShiftUser" \
+    ! oc delete clusterresourcequotas "limit-workshop-$openShiftUser" 
+    yq w "$(configdir)/workshop-student-quota.yaml" 'metadata.name' "limit-workshop-$openShiftUser" \
       | yq w -  'spec.selector.annotations."openshift.io/requester"' "$openShiftUser" \
       | oc apply -f - 
     yq w -i "$(configdir)/workshop-students-group.yaml" \

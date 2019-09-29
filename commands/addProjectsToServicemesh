@@ -3,7 +3,7 @@
 addProjectsToServicemesh::run(){
   echo "Creating Istio Service Member Roll"
 
-  local projects=($(readopt -p --prefix))
+  local projects=$(readopt -p --prefix)
   if [ -z $projects ]; then 
      projects=(${PROJECTS:-'tutorial'})
   fi
@@ -26,9 +26,13 @@ addProjectsToServicemesh::run(){
     for ((i=$project_from; i<=project_to ; i++ ));
     do
       yq w -i "$(configdir)/istio-service-member-roll.yaml" \
-        'spec.members[+]' $(printf "$project-%d" $i)
+        'spec.members[+]' $(printf "$p-%d" $i)
     done 
   done
+
+  # add knative-serving
+  yq w -i "$(configdir)/istio-service-member-roll.yaml" \
+        'spec.members[+]' 'knative-serving'
 
   oc apply -f "$(configdir)/istio-service-member-roll.yaml"
 

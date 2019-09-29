@@ -1,0 +1,20 @@
+#!/bin/bash
+
+installServicemesh::run() {
+ oc apply -f "$(configdir)/servicemesh/elasticsearch.yaml" 
+ oc apply -f "$(configdir)/servicemesh/jaeger.yaml" 
+ oc apply -f "$(configdir)/servicemesh/kiali.yaml" 
+ oc apply -f "$(configdir)/servicemesh/servicemesh.yaml" 
+}
+
+installServicemesh::clean() {
+  echo "WIP"
+}
+
+installServicemesh::usage(){
+  echo "No parameters"
+}
+
+installServicemesh::description(){
+  echo "Install Red Hat Servicemesh via Knative Eventing Operator"
+}

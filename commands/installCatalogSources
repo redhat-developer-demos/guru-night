@@ -1,7 +1,8 @@
 #!/bin/bash
 
 installCatalogSources::run() {
- oc apply -f "$(configdir)/catalog-sources.yaml" 
+ oc apply -f "$(configdir)/redhat-operators-csc.yaml" 
+ oc apply -f "$(configdir)/community-operators-csc.yaml" 
 }
 
 installCatalogSources::usage(){
@@ -9,5 +10,5 @@ installCatalogSources::usage(){
 }
 
 installCatalogSources::description(){
-  echo "Install Operator Catalog Sources"
+  echo "Install Operators Catalog Sources"
 }

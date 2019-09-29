@@ -1,7 +1,9 @@
 #!/bin/bash
 
 installKnativeServing::run() {
+ ! oc adm new-project knative-serving
  oc apply -f "$(configdir)/knative-serving/subscription.yaml" 
+ oc apply -f "$(configdir)/knative-serving/cr.yaml"
 }
 
 installKnativeServing::usage(){

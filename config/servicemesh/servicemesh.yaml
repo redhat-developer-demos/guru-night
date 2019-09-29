@@ -2,10 +2,10 @@
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
-  name: knative-serving
+  name: servicemesh
   namespace: openshift-operators
 spec:
-  channel: techpreview
+  channel: "1.0"
   source: redhat-operators-packages
-  name: serverless-operator
+  name: servicemeshoperator 
   sourceNamespace: openshift-operators
