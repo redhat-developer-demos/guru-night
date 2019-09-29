@@ -1,0 +1,11 @@
+apiVersion: quota.openshift.io/v1
+kind: ClusterResourceQuota
+metadata:
+  name: 
+spec:
+  quota:
+    hard:
+      pods: "7"
+  selector:
+    annotations:
+      openshift.io/requester: 

@@ -10,3 +10,7 @@ rules:
   - apiGroups: ["networking.istio.io"]
     resources: ["serviceentries","destinationrules"]
     verbs: ["get", "view","list"]
+  # not needed - TODO check and remove
+  # - apiGroups: ["networking.internal.knative.dev"]
+  #   resources: ["clusteringresses"]
+  #   verbs: ["get", "view","list"]

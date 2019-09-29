@@ -25,8 +25,12 @@ usersAndGroups::run(){
 
   for ((i=$user_from; i<=user_to ; i++ ));
   do
+    local openShiftUser=$(printf "$USER_PREFIX%d" $i)
+    yq w "$(configdir)/workshop-student-quota.yaml" 'metadata.name' "limit-$openShiftUser" \
+      | yq w -  'spec.selector.annotations."openshift.io/requester"' "$openShiftUser" \
+      | oc apply -f - 
     yq w -i "$(configdir)/workshop-students-group.yaml" \
-      "users[+]" $(printf "$USER_PREFIX%d" $i)
+      "users[+]" $openShiftUser
   done
 
   oc apply -f "$(configdir)/workshop-students-group.yaml"
