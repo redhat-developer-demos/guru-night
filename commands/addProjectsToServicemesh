@@ -37,7 +37,7 @@ addProjectsToServicemesh::run(){
   oc apply -f "$(configdir)/istio-service-member-roll.yaml"
 
   # Reset it back so that can be used with another setup
-  yq d -i "$(configdir)/istio-service-member-roll.yaml" "members" "[]"
+  yq d -i "$(configdir)/istio-service-member-roll.yaml" "spec.members" "[]"
 }
 
 addProjectsToServicemesh::usage(){

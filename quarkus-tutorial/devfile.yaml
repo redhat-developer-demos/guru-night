@@ -1,8 +1,6 @@
 apiVersion: 1.0.0
 metadata:
   name: quarkus-workshop
-attributes:
-  persistVolumes: 'false'
 projects:
   - name: quarkus-tutorial
     source:

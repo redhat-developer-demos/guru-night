@@ -152,6 +152,13 @@ A successful Eclipse Che install will have the following components
 
 image::./screenshots/eclipse_che_install_success.png[]
 
+====== Workshop Che optimizations
+
+[source,bash,subs="attributes+,+macros]
+----
+cat ./config/che.env | oc set env -e - deployment/che -n che
+----
+
 ====== Get Keycloak Password
 
 [source,bash,subs="attributes+,+macros]

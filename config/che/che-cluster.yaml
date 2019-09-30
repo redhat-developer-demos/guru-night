@@ -27,4 +27,4 @@ spec:
   storage:
     pvcStrategy: per-workspace
     pvcClaimSize: 1Gi
-    preCreateSubPaths: true
+    preCreateSubPaths: false
