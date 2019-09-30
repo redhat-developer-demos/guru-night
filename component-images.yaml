@@ -23,11 +23,6 @@ items:
         requests:
           cpu: 2
           memory: 2Gi
-      command:
-        - '/usr/local/bin/run.sh'
-      args:
-        - 'sleep'
-        - 'infinity'
 - apiVersion: v1
   kind: Pod
   metadata:
