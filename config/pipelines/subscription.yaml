@@ -6,6 +6,6 @@ metadata:
   namespace: openshift-operators
 spec:
   channel: dev-preview
-  source: rhd-workshop-packages
+  source: community-operators-packages
   name: openshift-pipelines-operator
   sourceNamespace: openshift-operators

@@ -8,6 +8,7 @@ projects:
     source:
       type: git
       location: 'https://github.com/redhat-developer-demos/istio-tutorial.git'
+      branch: "1.1.x"
   - name: knative-tutorial
     source:
       type: git

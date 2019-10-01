@@ -6,6 +6,6 @@ metadata:
   namespace: openshift-operators
 spec:
   channel: alpha
-  source: rhd-workshop-packages
+  source: community-operators-packages
   name: knative-eventing-operator
   sourceNamespace: openshift-operators
