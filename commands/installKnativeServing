@@ -1,10 +1,10 @@
 #!/bin/bash
 
 installKnativeServing::run() {
- !oc adm new-project knative-serving
+ ! oc adm new-project knative-serving
  oc apply -f "$(configdir)/knative-serving/subscription.yaml" 
  sleep .10
- # oc apply -f "$(configdir)/knative-serving/cr.yaml"
+ oc apply -f "$(configdir)/knative-serving/cr.yaml"
 }
 
 installKnativeServing::usage(){

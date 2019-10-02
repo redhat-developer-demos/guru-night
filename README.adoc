@@ -54,21 +54,17 @@ Its assumed that the cluster has been setup in one of the ways as above.
 
 == Workshop setup
 
-=== RHPDS
+=== Set Environment Variables
+Copy `setEnv.example` to `setEnv.sh`. Edit `setEnv.sh` and update the variables with values to match your environment. Login in as OpenShift cluster admin
 
-Once you have setup the cluster with RHPDS, please login with the cluster admin
-
-==== Install Nexus
-
-Since there will be lot java artifacts required 
-
-[source,bash,subs="attributes+,+macros"]
+[source,bash,subs="attributes+,+macros]
 ----
-oc adm new-project rhd-workshop-infra
-oc new-app -n rhd-workshop-infra sonatype/nexus
+oc login -u OPENSHIFT_ADMIN_USER -p $OPENSHIFT_ADMIN_USER_PASSWORD $OPENSHIFT_API_URL
 ----
 
-==== Delete quotas
+== RHPDS
+
+=== Delete quotas
 
 [IMPORTANT]
 =====
@@ -88,8 +84,27 @@ oc delete clusterresourcequotas.quota.openshift.io clusterquota-opentlc-mgr
 oc get clusterresourcequotas.quota.openshift.io
 ----
 
-=== Set Environment Variables
-Copy `setEnv.example` to `setEnv.sh`. Edit `setEnv.sh` and update the variables with values to match your environment.
+=== Install Nexus
+
+Since there will be lot java artifacts required 
+
+[source,bash,subs="attributes+,+macros"]
+----
+oc adm new-project rhd-workshop-infra
+oc new-app -n rhd-workshop-infra sonatype/nexus
+----
+
+=== Create Workshop Users
+
+[NOTE]
+=====
+If you are using RHPDS then the users are already created, hence you skip this step
+=====
+
+[source,bash]
+----
+./workshopper createUsers
+----
 
 === Install Operators
 
@@ -111,7 +126,7 @@ Navigate to project `openshift-operators` and navigate to menu:Catalog[Operator 
 
 image::./screenshots/operator_catalogs.png[]
 
-==== Install Eclipse Che
+=== Eclipse Che
 
 [source,bash,subs="attributes+,+macros]
 ----
@@ -125,15 +140,6 @@ It will take few minutes for the Che operator to appear, please wait for it befo
 [source,bash,subs="attributes+,+macros]
 ----
 oc get pods -n che -w
-----
-====
-
-[IMPORTANT]
-====
-Patch the Eclipse Che operator for enabling Keycloak tokenExchange. This will be removed in next release of Eclipse che
-[source,bash,subs="attributes+,+macros]
-----
-oc get clusterserviceversions  -n che eclipse-che.v7.1.0 -o yaml | yq w - 'metadata.annotations.containerImage' 'quay.io/dfestal/che-operator:enable-token-exchange' | yq w - 'spec.install.spec.deployments[0].spec.template.spec.containers[0].image' quay.io/dfestal/che-operator:enable-token-exchange | oc apply -n che -f -
 ----
 ====
 
@@ -152,7 +158,7 @@ A successful Eclipse Che install will have the following components
 
 image::./screenshots/eclipse_che_install_success.png[]
 
-====== Workshop Che optimizations
+==== Workshop Che optimizations
 
 [source,bash,subs="attributes+,+macros]
 ----
@@ -182,7 +188,7 @@ oc get routes -n che keycloak -o yaml | yq r - 'spec.host'
 
 The following section are optional based on what components that might be needed for the workshop.
 
-==== Install Istio
+=== Install Istio
 
 Istio will will be installed using Red Hat Servicemesh Operator, the following section details on how to install using operator and oc CLI.
 
@@ -216,7 +222,7 @@ servicemeshoperator.v1.0.0                   Red Hat OpenShift Service Mesh   1.
 
 IMPORTANT: Operator versions may vary from your output based on the latest available csv
 
-====== Deploy Control Plane
+===== Deploy Control Plane
 
 [source,bash,subs="attributes+,+macros"]
 ----
@@ -234,14 +240,14 @@ oc -n istio-system get pods -w
 If you see no pods getting created for long time, try running the command to `oc get svc -n istio-system` to see if the Servicemesh operators are copied to `istio-system` namespace. If you see them copied or copying wait for the copy to be done and run the command `./workshopper createServicemesh` again.
 ====
 
-===== Get all Service URLS of Istio Services
+==== Get all Service URLS of Istio Services
 
 [source,bash,subs="attributes+,+macros]
 ----
 oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.host'
 ----
 
-===== Create Istio service member roll
+==== Create Istio service member roll
 ----
 ./workshopper addProjectsToServicemesh
 ----
@@ -251,11 +257,11 @@ oc get routes -n istio-system -o custom-columns='NAME:.metadata.name,URL:.spec.h
 oc get -n istio-system ServiceMeshMemberRoll -o yaml
 ----
 
-==== Install Knative
+=== Install Knative
 
 We will be using Knative Serving and Knative Eventing Operators to install Knative Serving and Eventing components:
 
-===== Knative Serving
+==== Knative Serving
 
 [source,bash,subs="attributes+,+macros]
 ----
@@ -271,7 +277,7 @@ oc -n knative-serving get pods -w
 ----
 ====
 
-===== Knative Eventing
+==== Knative Eventing
 
 [source,bash,subs="attributes+,+macros]
 ----
@@ -287,7 +293,7 @@ oc -n knative-eventing get pods -w
 ----
 ====
 
-===== OpenShift Pipelines
+=== OpenShift Pipelines
 
 [source,bash,subs="attributes+,+macros]
 ----
@@ -310,18 +316,6 @@ oc -n openshift-pipelines get pods -w
 [source,bash,subs="attributes+,+macros]
 ----
 ./workshopper cacheImages
-----
-
-=== Create Workshop Users
-
-[NOTE]
-=====
-If you are using RHPDS then the users are already created, hence you skip this step
-=====
-
-[source,bash]
-----
-./workshopper createUsers
 ----
 
 === Create Workshop User Group and Role
