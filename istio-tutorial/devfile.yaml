@@ -16,6 +16,8 @@ components:
     type: chePlugin
   - id: redhat/java8/latest
     type: chePlugin
+    preferences:
+      java.configuration.maven.userSettings: /opt/developer/.m2/settings.xml
   - alias: container-tools
     type: kubernetes
     mountSources: true

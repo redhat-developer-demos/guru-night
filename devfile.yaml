@@ -24,6 +24,8 @@ components:
     type: chePlugin
   - id: redhat/java8/latest
     type: chePlugin
+    preferences:
+      java.configuration.maven.userSettings: /opt/developer/.m2/settings.xml
   # comment this for quarkus workshops
   - alias: container-tools
     type: kubernetes
