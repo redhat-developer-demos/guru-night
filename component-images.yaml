@@ -10,7 +10,7 @@ items:
   spec:
     containers:
     - name: tutorial-tools
-      image: quay.io/rhdevelopers/tutorial-tools:0.0.1
+      image: quay.io/rhdevelopers/tutorial-tools:0.0.2
       imagePullPolicy: IfNotPresent
       env:
         - name: MAVEN_MIRROR_URL
