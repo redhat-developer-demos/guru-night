@@ -5,10 +5,10 @@ metadata:
 type: Opaque
 data:
   IMAGES: >
-    che-remote-plugin-runner-java11=eclipse/che-remote-plugin-runner-java11:7.1.0;
-    che-remote-plugin-runner-java8=eclipse/che-remote-plugin-runner-java8:7.1.0;
-    che-theia-endpoint-runtime=eclipse/che-theia-endpoint-runtime:7.1.0;
-    che-theia=eclipse/che-theia:7.1.0;
+    che-remote-plugin-runner-java11=eclipse/che-remote-plugin-runner-java11:7.2.0;
+    che-remote-plugin-runner-java8=eclipse/che-remote-plugin-runner-java8:7.2.0;
+    che-theia-endpoint-runtime=eclipse/che-theia-endpoint-runtime:7.2.0;
+    che-theia=eclipse/che-theia:7.2.0;
     che-unified-plugin-broker=eclipse/che-unified-plugin-broker:v0.20;
     che-endpoint-watcher=eclipse/che-endpoint-watcher:nightly;
     che-jwtproxy=eclipse/che-jwtproxy;
