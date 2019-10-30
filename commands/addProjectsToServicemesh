@@ -30,6 +30,10 @@ addProjectsToServicemesh::run(){
     done 
   done
 
+  # add tutorial
+  yq w -i "$(configdir)/istio-service-member-roll.yaml" \
+        'spec.members[+]' 'tutorial'
+
   # add knative-serving
   yq w -i "$(configdir)/istio-service-member-roll.yaml" \
         'spec.members[+]' 'knative-serving'

@@ -122,7 +122,14 @@ configdir() {
 source $(basedir)/helpers.sh
 
 # Configure environment variables
-source $(basedir)/setEnv.sh
+if [ "${CLOUD_PROFILE}x" == "x" ];
+then 
+  source "$(basedir)/setEnv.sh"
+else
+  source "$(basedir)/setEnv-$CLOUD_PROFILE.sh"
+fi
+
+echo "Using kubeconfig '$KUBECONFIG'"
 
 if $(hasflag --verbose -v); then
     export PS4='+($(basename ${BASH_SOURCE[0]}):${LINENO}): ${FUNCNAME[0]:+${FUNCNAME[0]}(): }'

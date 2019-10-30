@@ -12,9 +12,9 @@ data:
     che-unified-plugin-broker=eclipse/che-unified-plugin-broker:v0.20;
     che-endpoint-watcher=eclipse/che-endpoint-watcher:nightly;
     che-jwtproxy=eclipse/che-jwtproxy;
-    tutorial-tools=quay.io/rhdevelopers/tutorial-tools:0.0.2;
-    container-tool=quay.io/rhdevelopers/container-tools:0.0.2;
-    clients=quay.io/rhdevelopers/clients:0.0.2;
+    tutorial-tools=quay.io/rhdevelopers/tutorial-tools:0.0.3;
+    container-tool=quay.io/rhdevelopers/container-tools:0.0.1;
+    clients=quay.io/rhdevelopers/clients:0.0.1;
     customer=quay.io/rhdevelopers/istio-tutorial-customer;
     customer-v1=quay.io/rhdevelopers/istio-tutorial-customer:v1;
     preference=quay.io/rhdevelopers/istio-tutorial-preference;
