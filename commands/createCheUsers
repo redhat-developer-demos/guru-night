@@ -59,13 +59,16 @@ createCheUsers::run(){
       echo "Updating user details '$che_user' $NL"
       
       local che_post_url="$che_keycloak_url/auth/admin/realms/che/users"
-      local user_id=$(http --headers --body $che_post_url "Authorization: Bearer $admin_token" username=="$che_user" | jq -r '.[0].id')
+      local user_id=$(http --headers --body $che_post_url "Authorization:Bearer $admin_token" username=="$che_user" | jq -r '.[0].id')
+      # http --verbose --headers --body $che_post_url \
+      #  "Authorization:Bearer $admin_token" username=="$che_user"\
+      #   | jq -r '.[0].id'
       
       echo "User Id: $user_id"
 
       local che_put_url="$che_keycloak_url/auth/admin/realms/che/users/$user_id"
       
-      http PUT $che_put_url "Authorization: Bearer $admin_token" \
+      http PUT $che_put_url "Authorization:Bearer $admin_token" \
       email="$user_prefix$i@example.com" \
       firstName="$user_prefix" \
       lastName="$i" \

@@ -8,6 +8,8 @@ createUsers::run(){
   ADMIN_PASSWORD=${OPENSHIFT_ADMIN_USER_PASSWORD:-'adminPassword'}
   PASSWORD=${WORKSHOP_USER_DEFAULT_PASSWORD:-'password'}
 
+  mkdir -p $WORK_DIR
+  
   # keep this name avoids setting key in the oc secret command
   PASSWORD_FILE="$WORK_DIR/htpasswd"
   ADMIN_USER_NAME="ocpadmin"

@@ -1,11 +1,13 @@
 apiVersion: 1.0.0
 metadata:
   name: quarkus-workshop
+attributes:
+  persistVolumes: "false"
 projects:
   - name: quarkus-tutorial
     source:
       type: git
-      location: 'https://github.com/redhat-developer-demos/quarkus-tutorial.git'
+      location: "https://github.com/redhat-developer-demos/quarkus-tutorial.git"
 components:
   - id: redhat/vscode-yaml/latest
     type: chePlugin
@@ -22,5 +24,8 @@ components:
     reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
     selector:
       app: tutorial-tools
-
-
+  - alias: db
+    type: kubernetes
+    reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
+    selector:
+      app: database
