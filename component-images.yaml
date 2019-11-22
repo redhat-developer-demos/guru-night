@@ -1,63 +1,109 @@
 apiVersion: v1
 kind: List
 items:
-- apiVersion: v1
-  kind: Pod
-  metadata:
-    name: tutorial-tools
-    labels:
-      app: tutorial-tools
-  spec:
-    containers:
-    - name: tutorial-tools
-      image: quay.io/rhdevelopers/tutorial-tools:0.0.3
-      imagePullPolicy: IfNotPresent
-      env:
-        - name: MAVEN_MIRROR_URL
-          value: 'http://nexus.rhd-workshop-infra:8081/nexus/content/groups/public'
-      workingDir:  /projects
-      resources:
-        limits: 
-          cpu: 4
-          memory: 4Gi
-        requests:
-          cpu: 2
-          memory: 2Gi
-- apiVersion: v1
-  kind: Pod
-  metadata:
-    name: tutorial-clients
-    labels:
-      app: tutorial-clients
-  spec:
-    containers:
-    - name: tutorial-clients
-      image: 'quay.io/rhdevelopers/clients:0.0.1'
-      imagePullPolicy: IfNotPresent
-      resources:
-        limits: 
-          cpu: "1"
-          memory: "1Gi"
-        requests:
-          cpu: "0.5"
-          memory: "512m"
-      workingDir:  /projects
-- apiVersion: v1
-  kind: Pod
-  metadata:
-    name: container-tools
-    labels:
-      app: container-tools
-  spec:
-    containers:
-    - name: container-tools
-      image: 'quay.io/rhdevelopers/container-tools:0.0.1'
-      imagePullPolicy: IfNotPresent
-      resources:
-        limits: 
-          cpu: "1"
-          memory: "1Gi"
-        requests:
-          cpu: "0.5"
-          memory: "512m"
-      workingDir:  /projects
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      name: tutorial-tools
+      labels:
+        app: tutorial-tools
+    spec:
+      containers:
+        - name: tutorial-tools
+          image: quay.io/rhdevelopers/tutorial-tools:0.0.3
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: MAVEN_MIRROR_URL
+              value: "http://nexus.rhd-workshop-infra:8081/nexus/content/groups/public"
+          workingDir: /projects
+          resources:
+            limits:
+              cpu: 4
+              memory: 4Gi
+            requests:
+              cpu: 2
+              memory: 4Gi
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      name: tutorial-clients
+      labels:
+        app: tutorial-clients
+    spec:
+      containers:
+        - name: tutorial-clients
+          image: "quay.io/rhdevelopers/clients:0.0.1"
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+            requests:
+              cpu: "0.5"
+              memory: "512m"
+          workingDir: /projects
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      name: container-tools
+      labels:
+        app: container-tools
+    spec:
+      containers:
+        - name: container-tools
+          image: "quay.io/rhdevelopers/container-tools:0.0.1"
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+            requests:
+              cpu: "0.5"
+              memory: "512m"
+          workingDir: /projects
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      name: mariadb
+      labels:
+        app: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          resources:
+            limits:
+              memory: 512Mi
+            requests:
+              memory: 512Mi
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - "-i"
+                - "-c"
+                - >-
+                  MYSQL_PWD="$MYSQL_PASSWORD" mysql -h 127.0.0.1 -u $MYSQL_USER -D
+                  $MYSQL_DATABASE -e 'SELECT 1'
+          initialDelaySeconds: 5
+          timeoutSeconds: 1
+          periodSeconds: 10
+          successThreshold: 1
+          failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+          env:
+            - name: MYSQL_USER
+              value: demo
+            - name: MYSQL_PASSWORD
+              value: password
+            - name: MYSQL_ROOT_PASSWORD
+              value: superS3cret!
+            - name: MYSQL_DATABASE
+              value: demodb
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+          imagePullPolicy: IfNotPresent
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/openshift/mariadb
