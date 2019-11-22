@@ -65,6 +65,8 @@ items:
     kind: Pod
     metadata:
       name: mariadb
+      annotations:
+        openshift.io/scc: anyuid
       labels:
         app: mariadb
     spec:
