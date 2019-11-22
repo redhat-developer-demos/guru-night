@@ -64,14 +64,12 @@ items:
   - apiVersion: v1
     kind: Pod
     metadata:
-      name: mariadb
-      annotations:
-        openshift.io/scc: anyuid
+      name: database
       labels:
-        app: mariadb
+        app: database
     spec:
       containers:
-        - name: mariadb
+        - name: database
           resources:
             limits:
               memory: 512Mi
@@ -80,32 +78,32 @@ items:
           readinessProbe:
             exec:
               command:
-                - /bin/sh
-                - "-i"
-                - "-c"
-                - >-
-                  MYSQL_PWD="$MYSQL_PASSWORD" mysql -h 127.0.0.1 -u $MYSQL_USER -D
-                  $MYSQL_DATABASE -e 'SELECT 1'
-          initialDelaySeconds: 5
-          timeoutSeconds: 1
-          periodSeconds: 10
-          successThreshold: 1
-          failureThreshold: 3
+                - /usr/libexec/check-container
+            initialDelaySeconds: 5
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
           livenessProbe:
-            tcpSocket:
-              port: 3306
+            exec:
+              command:
+                - /usr/libexec/check-container
+                - "--live"
+            initialDelaySeconds: 120
+            timeoutSeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
           env:
-            - name: MYSQL_USER
+            - name: POSTGRESQL_USER
               value: demo
-            - name: MYSQL_PASSWORD
+            - name: POSTGRESQL_PASSWORD
               value: password
-            - name: MYSQL_ROOT_PASSWORD
-              value: superS3cret!
-            - name: MYSQL_DATABASE
+            - name: POSTGRESQL_DATABASE
               value: demodb
           ports:
-            - containerPort: 3306
+            - containerPort: 5432
               protocol: TCP
           imagePullPolicy: IfNotPresent
           image: >-
-            docker.io/mariadb:10.4.4
+            image-registry.openshift-image-registry.svc:5000/openshift/postgresql
