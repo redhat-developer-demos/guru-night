@@ -106,4 +106,4 @@ items:
               protocol: TCP
           imagePullPolicy: IfNotPresent
           image: >-
-            image-registry.openshift-image-registry.svc:5000/openshift/mariadb
+            docker.io/mariadb:10.4.4
