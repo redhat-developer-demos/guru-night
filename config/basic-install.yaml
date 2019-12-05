@@ -3,13 +3,8 @@ kind: ServiceMeshControlPlane
 metadata:
   name: basic-install
 spec:
-  # NOTE, if you remove all children from an element, you should remove the
-  # element too.  An empty element is interpreted as null and will override all
-  # default values (i.e. no values will be specified for that element, not even
-  # the defaults baked into the chart values.yaml).
   istio:
     global:
-      multitenant: false
       proxy:
         # constrain resources for use in smaller environments
         resources:
@@ -50,12 +45,12 @@ spec:
       traceSampling: 100.0
       # constrain resources for use in smaller environments
       resources:
-          requests:
-            cpu: 100m
-            memory: 1Gi
-          limits:
-            cpu: 500m
-            memory: 2Gi
+        requests:
+          cpu: 100m
+          memory: 1Gi
+        limits:
+          cpu: 500m
+          memory: 2Gi
     kiali:
       # change to false to disable kiali
       enabled: true
