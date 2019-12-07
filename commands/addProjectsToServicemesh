@@ -21,19 +21,15 @@ addProjectsToServicemesh::run(){
      project_to=$USERS_TO
   fi
   
-  for p in "${projects[@]}" 
+  # Add only Istio Tutorial projects to the istio-system-smmr
+  # !!!IMPORTANT !!! Dont add Knative projects to Istio SMMR
+  p='tutorial'
+  for ((i=$project_from; i<=project_to ; i++ ));
   do
-    for ((i=$project_from; i<=project_to ; i++ ));
-    do
-      yq w -i "$(configdir)/istio-service-member-roll.yaml" \
-        'spec.members[+]' $(printf "$p-%d" $i)
-    done 
-  done
-
-  # add tutorial
-  yq w -i "$(configdir)/istio-service-member-roll.yaml" \
-        'spec.members[+]' 'tutorial'
-
+    yq w -i "$(configdir)/istio-service-member-roll.yaml" \
+      'spec.members[+]' $(printf "$p-%d" $i)
+  done 
+  
   oc apply -f "$(configdir)/istio-service-member-roll.yaml"
 
   # # Reset it back so that can be used with another setup

@@ -1,0 +1,54 @@
+#!/bin/bash
+
+local project='tutorial'
+
+local project_from=$(readopt -f --from)
+if [ -z $project_from ]; then 
+    project_from=$USERS_FROM
+fi
+
+local project_to=$(readopt -t --to)
+if [ -z $project_to ]; then 
+    project_to=$USERS_TO
+fi
+
+local cp=$(readopt -p --cloud-profile)
+if [ -z $cp ]; then 
+    cp=$CLOUD_PROFILE
+fi
+
+if [ -z $cp ]; then 
+  echo "ERROR: Need to specify the Cloud Profile or set environment variable $CLOUD_PROFILE to 'aws' or 'gcp' or 'azr' "
+  exit 2
+fi
+
+
+local ds=$(readopt -d --apps-domain-suffix)
+if [ -z $ds ]; then 
+   echo "ERROR: Need to specify the OpenShift application domain suffix"
+   exit 3
+fi
+
+
+verifyLoad::run() {
+ while [[ true ]]; do
+  for (( i = $project_from; i < $project_to; i++ )); do
+    URL="helloworld-$i-$project.apps.$cp.$ds"
+    echo "Calling URL: $URL"
+    http --headers --body $URL 
+  done
+ done
+}
+
+verifyLoad::usage(){
+   cat <<EOT
+  -f --from <project count from>                   The starting user count e.g. 1
+  -t --to <project count to>                       The ending user count e.g. 10
+  -p --cloud-profile <cloud profile>               The cloud profile to use one of 'aws','gcp','azr'
+  -d --apps-domain-suffix <application domain>     The OpenShift application domain suffix
+EOT
+}
+
+verifyLoad::description(){
+  echo "Does a verify the load created via the load test"
+}

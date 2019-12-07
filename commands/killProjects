@@ -29,7 +29,7 @@ killProjects::run(){
       openshiftProject=$(printf '%s-%d' $p $i)
       printf "Deleting OpenShift Project $openshiftProject \n"
       oc delete project $openshiftProject
-      kubectl get namespace $openshiftProject -o json | jq .spec.finalizers=[] > $WORK_DIR/tmp.json
+      oc get namespace $openshiftProject -o json | jq .spec.finalizers=[] > $WORK_DIR/tmp.json
       export TOKEN=$(oc whoami -t)
       curl -k -H "Content-Type: application/json" -H "Authorization: Bearer $TOKEN" -X PUT --data-binary @"$WORK_DIR/tmp.json" "$OPENSHIFT_API_URL/api/v1/namespaces/$openshiftProject/finalize"
     done

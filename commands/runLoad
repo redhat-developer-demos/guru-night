@@ -1,0 +1,45 @@
+#!/bin/bash
+
+local project='tutorial'
+
+local project_from=$(readopt -f --from)
+if [ -z $project_from ]; then 
+    project_from=$USERS_FROM
+fi
+
+local project_to=$(readopt -t --to)
+if [ -z $project_to ]; then 
+    project_to=$USERS_TO
+fi
+
+local cp=$(readopt -p --cloud-profile)
+if [ -z $cp ]; then 
+    cp=$CLOUD_PROFILE
+fi
+
+if [ -z $cp ]; then 
+    echo "Need to specify the Cloud Profile or set environment variable $CLOUD_PROFILE to 'aws' or 'gcp' or 'azr' "
+fi
+
+runLoad::run() {
+ ! oc new-project $project
+ for (( i = $project_from; i < $project_to; i++ )); do
+  echo "Creating App for User $i"
+  oc  new-app --namespace="$project" nodeshift/centos7-s2i-nodejs:10.x~https://github.com/redhat-developer-demos/linux-container-world-apps \
+  --context-dir=nodejs \
+  --name="helloworld-$i" &> /dev/null
+  oc expose svc "helloworld-$i" 
+ done
+}
+
+runLoad::usage(){
+   cat <<EOT
+  -f --from <project count from>    The starting user count e.g. 1
+  -t --to <project count to>        The ending user count e.g. 10
+  -p --cloud-profile <cloud profile>       The cloud profile to use one of 'aws','gcp','azr'
+EOT
+}
+
+runLoad::description(){
+  echo "Does a sample load test to verfi environment"
+}
