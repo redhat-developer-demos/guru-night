@@ -6,7 +6,7 @@ metadata:
 spec:
   istio:
     global:
-      multitenant: false
+      multitenant: true
       proxy:
         resources:
           requests:
