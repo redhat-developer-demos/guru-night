@@ -1,0 +1,20 @@
+#!/bin/bash
+
+installKafka::run() {
+ ! oc adm new-project kafka
+ oc apply -f "$(configdir)/kafka/subscription.yaml" 
+ sleep 60
+ oc apply -f "$(configdir)/kafka/cr.yaml"
+}
+
+installKafka::clean() {
+  echo "WIP"
+}
+
+installKafka::usage(){
+  echo "No parameters"
+}
+
+installKafka::description(){
+  echo "Install Kafka via Strimzi Operator"
+}

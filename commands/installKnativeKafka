@@ -1,0 +1,19 @@
+#!/bin/bash
+
+installKnativeKafka::run() {
+ oc apply -f "$(configdir)/knative-eventing-kafka/subscription.yaml" 
+ sleep 60
+ oc apply -f "$(configdir)/knative-eventing-kafka/cr.yaml" 
+}
+
+installKnativeKafka::clean() {
+  echo "WIP"
+}
+
+installKnativeKafka::usage(){
+  echo "No parameters"
+}
+
+installKnativeKafka::description(){
+  echo "Install Kafka via Strimzi Operator"
+}
