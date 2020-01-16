@@ -293,6 +293,38 @@ oc -n knative-eventing get pods -w
 ----
 ====
 
+=== Strimzi Kafka
+
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper installKafka
+----
+
+[NOTE]
+====
+It will take few minutes for the Kafka pods to appear please run the following commands to watch the status:
+[source,bash,subs="attributes+,+macros]
+----
+oc -n kafka get pods -w
+----
+====
+
+=== Knative Eventing Kafka
+
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper installKnativeKafka
+----
+
+[NOTE]
+====
+It will take few minutes for the Knative Eventing Kafka pods to appear please run the following commands to watch the status:
+[source,bash,subs="attributes+,+macros]
+----
+oc -n knative-eventing get pods -w
+----
+====
+
 === OpenShift Pipelines
 
 [source,bash,subs="attributes+,+macros]
