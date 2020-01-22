@@ -15,5 +15,5 @@ installKnativeKafka::usage(){
 }
 
 installKnativeKafka::description(){
-  echo "Install Kafka via Strimzi Operator"
+  echo "Install Knative Kafka Components"
 }

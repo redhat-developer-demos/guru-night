@@ -1,0 +1,17 @@
+#!/bin/bash
+
+installKnativeCamel::run() {
+ oc apply -f "$(configdir)/knative-camel/subscription.yaml" 
+}
+
+installKnativeCamel::usage(){
+  echo "No parameters"
+}
+
+installKnativeCamel::clean(){
+  echo "WIP"
+}
+
+installKnativeCamel::description(){
+  echo "Install Knative CamelSource via Operator"
+}

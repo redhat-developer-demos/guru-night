@@ -1,0 +1,17 @@
+#!/bin/bash
+
+installKamel::run() {
+ oc apply -f "$(configdir)/kamel/subscription.yaml" 
+}
+
+installKamel::usage(){
+  echo "No parameters"
+}
+
+installKamel::clean(){
+  echo "WIP"
+}
+
+installKamel::description(){
+  echo "Install Eclipse Che via Operator"
+}

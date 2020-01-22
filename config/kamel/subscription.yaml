@@ -1,0 +1,11 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: camel-k
+  namespace: openshift-operators
+spec:
+  channel: alpha
+  source: community-operators-packages
+  name: camel-k
+  sourceNamespace: openshift-operators

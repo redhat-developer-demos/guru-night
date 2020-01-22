@@ -1,0 +1,11 @@
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: knative-camel
+  namespace: openshift-operators
+spec:
+  channel: alpha
+  source: community-operators-packages
+  name: knative-camel-operator
+  sourceNamespace: openshift-operators

@@ -1,7 +1,7 @@
 = Red Hat Developers Workshop Guide
 :experimental:
 
-How to setup the workshop using OpenShift4 
+How to setup the workshop using OpenShift4
 
 == Pre-req
 
@@ -15,7 +15,7 @@ The scripts uses these tools for various functions, please have them installed b
 
 === RHPDS
 
-Setup OpenShift4 Cluster via RHPDS 
+Setup OpenShift4 Cluster via RHPDS
 
 === Bring Your Own Cluster (BYC)
 Create a OCP4 cluster by visiting try.openshift.com and downloading the openshift installer binary for Linux or Mac
@@ -28,12 +28,12 @@ Follow the prompts for your SSH key, your favorite AWS Region, your Route53 doma
 
 ----
   name: worker
-  platform: 
+  platform:
      aws:
        type: m5.4xlarge
 
   name: master
-  platform: 
+  platform:
      aws:
        type: c5.4xlarge
 ----
@@ -86,7 +86,7 @@ oc get clusterresourcequotas.quota.openshift.io
 
 === Install Nexus
 
-Since there will be lot java artifacts required 
+Since there will be lot java artifacts required
 
 [source,bash,subs="attributes+,+macros"]
 ----
@@ -134,9 +134,9 @@ oc adm new-project che --description="Eclipse Che"
 ./workshopper installChe
 ----
 
-[NOTE] 
+[NOTE]
 ====
-It will take few minutes for the Che operator to appear, please wait for it before doing the next step. You can watch the status of the Eclipse Che operator via 
+It will take few minutes for the Che operator to appear, please wait for it before doing the next step. You can watch the status of the Eclipse Che operator via
 [source,bash,subs="attributes+,+macros]
 ----
 oc get pods -n che -w
@@ -169,7 +169,7 @@ cat ./config/che.env | oc set env -e - deployment/che -n che
 
 [source,bash,subs="attributes+,+macros]
 ----
-export KEYCLOAK_PASSWORD=$(oc get -n che deployment keycloak -o jsonpath='{.spec.template.spec.containers[*].env[?(@.name=="KEYCLOAK_PASSWORD")].value}')
+"export KEYCLOAK_PASSWORD=$(oc get -n che deployment keycloak -o jsonpath='{.spec.template.spec.containers[pass:['*']].env[?(@.name=="KEYCLOAK_PASSWORD")].value}')
 ----
 
 ====== Get Eclipse Che URL
@@ -204,7 +204,7 @@ It will take for some time for Servicemesh and its dependencies to be resolve, y
 watch 'oc get csv -n openshift-operators'
 ----
 
-A successful install will show an output like 
+A successful install will show an output like
 
 [source,bash]
 ----
@@ -325,6 +325,31 @@ oc -n knative-eventing get pods -w
 ----
 ====
 
+.Eventing Sources
+[source,bash,subs="+quotes,attributes+,+macros]
+----
+$*oc api-resources --api-group=sources.eventing.knative.dev*
+NAME               SHORTNAMES   APIGROUP                       NAMESPACED   KIND
+apiserversources                sources.eventing.knative.dev   true         ApiServerSource
+containersources                sources.eventing.knative.dev   true         ContainerSource
+cronjobsources                  sources.eventing.knative.dev   true         CronJobSource
+kafkasources                    sources.eventing.knative.dev   true         KafkaSource
+sinkbindings                    sources.eventing.knative.dev   true         SinkBinding
+----
+
+.Channels
+[source,bash,subs="+quotes,attributes+,+macros]
+----
+$ *oc api-resources --api-group=messaging.knative.dev*
+NAME               SHORTNAMES   APIGROUP                NAMESPACED   KIND
+channels           ch           messaging.knative.dev   true         Channel
+inmemorychannels   imc          messaging.knative.dev   true         InMemoryChannel
+kafkachannels      kc           messaging.knative.dev   true         KafkaChannel
+parallels                       messaging.knative.dev   true         Parallel
+sequences                       messaging.knative.dev   true         Sequence
+subscriptions      sub          messaging.knative.dev   true         Subscription
+----
+
 === OpenShift Pipelines
 
 [source,bash,subs="attributes+,+macros]
@@ -340,6 +365,50 @@ It will take few minutes for the OpenShift pipelines pods to appear please run t
 oc -n openshift-pipelines get pods -w
 ----
 ====
+
+=== kamel
+
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper installKamel
+----
+
+[source,bash,subs="+quotes,attributes+,+macros]
+----
+$ *kubectl api-resources --api-group=camel.apache.org*
+NAME                   SHORTNAMES   APIGROUP           NAMESPACED   KIND
+builds                              camel.apache.org   true         Build
+camelcatalogs          cc           camel.apache.org   true         CamelCatalog
+integrationkits        ik           camel.apache.org   true         IntegrationKit
+integrationplatforms   ip           camel.apache.org   true         IntegrationPlatform
+integrations           it           camel.apache.org   true         Integration
+----
+
+[IMPORTANT]
+----
+Run `kamel install` in the namespace where you want kamel integrations to be deployed.
+Since the opeator and API are setup globally in previous setup, you can skip the install using the options `--skip-cluster-setup` and `--skip-operator-setup` -- that is, `kamel install --skip-operator-setup --skip-cluster-setup` --
+----
+
+=== Knative Camel
+
+[source,bash,subs="attributes+,+macros]
+----
+./workshopper installKnativeCamel
+----
+
+.Sources
+[source,bash,subs="+quotes,attributes+,+macros]
+----
+$*oc api-resources --api-group=sources.eventing.knative.dev*
+NAME               SHORTNAMES   APIGROUP                       NAMESPACED   KIND
+apiserversources                sources.eventing.knative.dev   true         ApiServerSource
+*camelsources                    sources.eventing.knative.dev   true         CamelSource*
+containersources                sources.eventing.knative.dev   true         ContainerSource
+cronjobsources                  sources.eventing.knative.dev   true         CronJobSource
+kafkasources                    sources.eventing.knative.dev   true         KafkaSource
+sinkbindings                    sources.eventing.knative.dev   true         SinkBinding
+----
 
 == Workshop users, projects and quotas
 
