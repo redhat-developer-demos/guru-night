@@ -128,41 +128,17 @@ image::./screenshots/operator_catalogs.png[]
 
 === Eclipse Che
 
-[source,bash,subs="attributes+,+macros]
+[source,bash,subs="+quotes,attributes+,+macros]
 ----
-oc adm new-project che --description="Eclipse Che"
-./workshopper installChe
+$ *bash <(curl -sL  https://www.eclipse.org/che/chectl/)*
+$ *./workshopper createCheCluster*
 ----
-
-[NOTE]
-====
-It will take few minutes for the Che operator to appear, please wait for it before doing the next step. You can watch the status of the Eclipse Che operator via
-[source,bash,subs="attributes+,+macros]
-----
-oc get pods -n che -w
-----
-====
-
-Navigate to project `che` and navigate to menu:Home[Projects > che], please wait for some time for the operator to get installed, a successful Eclipse Che Operator install will be like:
-
-image::./screenshots/eclipse_che_operator_success.png[]
-
-[source,bash,subs="attributes+,+macros]
-----
-./workshopper createCheCluster
-----
-
-It will take few mins for Eclipse Che and its components to be running, you can check the status using the command `oc get -n che pods -w `
-
-A successful Eclipse Che install will have the following components
-
-image::./screenshots/eclipse_che_install_success.png[]
 
 ==== Workshop Che optimizations
 
 [source,bash,subs="attributes+,+macros]
 ----
-cat ./config/che.env | oc set env -e - deployment/che -n che
+cat ./config/che/che.env | oc set env -e - deployment/che -n che
 ----
 
 ====== Get Keycloak Password
@@ -464,6 +440,13 @@ Annotate the projects with right OpenShift user to allow resource quotas to be a
 [source,bash]
 -----
 ./workshopper annotateProjects
+-----
+
+==== Configure project
+
+[source,bash]
+-----
+./workshopper configProjects
 -----
 
 == Cleanup

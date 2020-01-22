@@ -3,7 +3,7 @@
 
 createUsers::run(){
 
-  echo "Generating Workshop Users"
+  echo "Generating Workshop Users $KUBECONFIG"
 
   ADMIN_PASSWORD=${OPENSHIFT_ADMIN_USER_PASSWORD:-'adminPassword'}
   PASSWORD=${WORKSHOP_USER_DEFAULT_PASSWORD:-'password'}
@@ -11,7 +11,7 @@ createUsers::run(){
   mkdir -p $WORK_DIR
   
   # keep this name avoids setting key in the oc secret command
-  PASSWORD_FILE="$WORK_DIR/htpasswd"
+  PASSWORD_FILE="$WORK_DIR/htpasswd-$CLOUD_PROFILE"
   ADMIN_USER_NAME="ocpadmin"
 
   if [ ! -f $PASSWORD_FILE ];
@@ -46,6 +46,8 @@ createUsers::run(){
 
   # Add openshift cluster admin user
   htpasswd -b $PASSWORD_FILE $ADMIN_USER_NAME $ADMIN_PASSWORD
+
+  echo "Using OpenShift servr : $(oc whoami --show-server)"
 
   # Create user secret in OpenShift
   ! oc -n openshift-config delete secret htpasswdidp-secret

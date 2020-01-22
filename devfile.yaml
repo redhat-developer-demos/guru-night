@@ -1,14 +1,17 @@
 apiVersion: 1.0.0
 metadata:
-  name: devnation-live
+  name: rhd-workshop
 attributes:
   persistVolumes: 'false'
 projects:
+  - name: linux-container-world-apps
+    source:
+      type: git
+      location: 'https://github.com/redhat-developer-demos/linux-container-world-apps.git'
   - name: istio-tutorial
     source:
       type: git
       location: 'https://github.com/redhat-developer-demos/istio-tutorial.git'
-      branch: "1.1.x"
   - name: knative-tutorial
     source:
       type: git

@@ -2,6 +2,7 @@
 
 createServicemesh::run() {
  ! oc adm new-project istio-system
+ sleep 60
  oc apply -n 'istio-system' -f "$(configdir)/servicemesh/control-plane.yaml" 
 }
 
