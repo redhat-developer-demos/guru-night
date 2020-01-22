@@ -1,0 +1,40 @@
+runtime:
+  cache_dir: ./.cache/antora
+
+site:
+  title: Introduction to Containers and OpenShift
+  url: https://nz-workshops.web.app
+  start_page: openshift-basics::index.adoc
+
+content:
+  sources:
+    - url: .
+      branches: HEAD
+      start_path: documentation
+    - url: ../intro-k8s-openshift
+      branches: HEAD
+
+asciidoc:
+  attributes:
+    workshop: yes
+    tutorial-namespace: tutorial
+    title: Introduction to Containers and OpenShift
+    workshop-domain: aws.devx.red
+    release-version: release/0.7.x
+    openshift-console-url: https://console-openshift-console.apps.aws.devx.red
+    etherpad-url: https://bit.ly/nznog-workshops
+    ocpurl: https://api.aws.devx.red
+    appdomain: apps.aws.devx.red
+    etherpad: https://bit.ly/nznog-workshops
+    namespace-suffix: -$WORKSHOP_USER
+    path: customer$WORKSHOP_USER
+    workspace-url: https://che-che.apps.aws.devx.red/f?url=https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/devfile.yaml
+  extensions:
+    - ./lib/copy-to-clipboard.js
+    - ./lib/tab-block.js
+ui:
+  bundle:
+    url: https://github.com/redhat-developer-demos/rhd-tutorial-ui/releases/download/v0.0.4/ui-bundle.zip
+  supplemental_files: ./supplemental-ui
+output:
+  dir: ./gh-pages

@@ -1,0 +1,45 @@
+runtime:
+  cache_dir: ./.cache/antora
+
+site:
+  title: Servicemesh and Serverless Workshop
+  url: https://nz-workshops.web.app
+  start_page: guru-night::index.adoc
+
+content:
+  sources:
+    - url: .
+      branches: HEAD
+      start_path: documentation
+    - url: ../intro-k8s-openshift
+      branches: HEAD
+    - url: ../knative-tutorial-module-basics
+      branches: release/0.7.x
+    - url: ../istio-tutorial
+      start_path: documentation
+      branches: 1.1.x
+
+asciidoc:
+  attributes:
+    workshop: yes
+    tutorial-namespace: knativetutorial-$WORKSHOP_USER
+    title: Servicemesh and Serverless Workshop
+    workshop-domain: azr.workspace7.org
+    release-version: release/0.7.x
+    openshift-console-url: https://console-openshift-console.apps.azr.workspace7.org
+    etherpad-url: https://bit.ly/nz-workshops
+    ocpurl: https://api.azr.workspace7.org
+    appdomain: apps.azr.workspace7.org
+    etherpad: https://bit.ly/nz-workshops
+    namespace-suffix: -$WORKSHOP_USER
+    path: customer$WORKSHOP_USER
+    workspace-url: https://che-che.apps.azr.workspace7.org/f?url=https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/devfile.yaml
+  extensions:
+    - ./lib/copy-to-clipboard.js
+    - ./lib/tab-block.js
+ui:
+  bundle:
+    url: https://github.com/redhat-developer-demos/rhd-tutorial-ui/releases/download/v0.0.4/ui-bundle.zip
+  supplemental_files: ./supplemental-ui
+output:
+  dir: ./gh-pages
