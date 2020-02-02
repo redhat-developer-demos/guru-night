@@ -1,8 +1,7 @@
 #!/bin/bash
 
 installChe::run() {
- ! oc adm new-project che &&\
- oc apply -f "$(configdir)/che/che-csc-subscription.yaml" 
+ chectl server:start --multiuser --platform=openshift --tls --os-oauth
 }
 
 installChe::usage(){

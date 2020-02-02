@@ -1,13 +1,9 @@
 apiVersion: 1.0.0
 metadata:
-  name: rhd-workshop
+  name: Servicemesh and Serverless Workshop
 attributes:
   persistVolumes: 'false'
 projects:
-  - name: linux-container-world-apps
-    source:
-      type: git
-      location: 'https://github.com/redhat-developer-demos/linux-container-world-apps.git'
   - name: istio-tutorial
     source:
       type: git
@@ -16,10 +12,6 @@ projects:
     source:
       type: git
       location: 'https://github.com/redhat-developer-demos/knative-tutorial.git'
-  # - name: quarkus-tutorial
-  #   source:
-  #     type: git
-  #     location: 'https://github.com/redhat-developer-demos/quarkus-tutorial.git'
 components:
   - id: redhat/vscode-yaml/latest
     type: chePlugin
@@ -29,17 +21,9 @@ components:
     type: chePlugin
     preferences:
       java.configuration.maven.userSettings: /opt/developer/.m2/settings.xml
-  # comment this for quarkus workshops
   - alias: container-tools
     type: kubernetes
     mountSources: true
     reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
     selector:
       app: container-tools
-  # enable this for quarkus workshops
-  # - alias: tutorial-tools
-  #   type: kubernetes
-  #   mountSources: true
-  #   reference: https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/component-images.yaml
-  #   selector:
-  #     app: tutorial-tools

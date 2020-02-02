@@ -90,7 +90,7 @@ Since there will be lot java artifacts required
 
 [source,bash,subs="attributes+,+macros"]
 ----
-oc adm new-project rhd-workshop-infra
+oc new-project rhd-workshop-infra
 oc new-app -n rhd-workshop-infra sonatype/nexus
 ----
 
@@ -136,7 +136,7 @@ $ *./workshopper createCheCluster*
 
 ==== Workshop Che optimizations
 
-[source,bash,subs="attributes+,+macros]
+[source,bash,subs="+quotes,attributes+,+macros]
 ----
 cat ./config/che/che.env | oc set env -e - deployment/che -n che
 ----

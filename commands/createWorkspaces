@@ -61,9 +61,9 @@ createWorkspaces::run(){
     
     echo "Creating Eclipse Che workspace for user $che_user"
  
-   chectl workspace:start \
-      --devfile="${WORKSHOP_DEVFILE_URL}" \
-      --access-token="$access_token" 
+    chectl workspace:start \
+        --devfile="${WORKSHOP_DEVFILE_URL}" \
+        --access-token="$access_token" 
     fi 
   done
 }

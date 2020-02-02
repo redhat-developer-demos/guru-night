@@ -3,7 +3,7 @@ runtime:
 
 site:
   title: Servicemesh and Serverless Workshop
-  url: https://nz-workshops.web.app
+  url: https://spark-nz-2020.web.app
   start_page: guru-night::index.adoc
 
 content:
@@ -27,10 +27,10 @@ asciidoc:
     workshop-domain: azr.workspace7.org
     release-version: release/0.7.x
     openshift-console-url: https://console-openshift-console.apps.azr.workspace7.org
-    etherpad-url: https://bit.ly/nz-workshops
-    ocpurl: https://api.azr.workspace7.org
+    etherpad-url: https://red.ht/spark-akl-2020
+    ocpurl: https://api.azr.workspace7.org:6443
     appdomain: apps.azr.workspace7.org
-    etherpad: https://bit.ly/nz-workshops
+    etherpad: https://red.ht/spark-akl-2020
     namespace-suffix: -$WORKSHOP_USER
     path: customer$WORKSHOP_USER
     workspace-url: https://che-che.apps.azr.workspace7.org/f?url=https://raw.githubusercontent.com/redhat-developer-demos/guru-night/master/devfile.yaml
