@@ -1,7 +1,12 @@
-spec.identityProviders[+]: 
-  name: htpasswdidp
-  type: HTPasswd
-  mappingMethod: claim 
-  htpasswd:
-    fileData:
-      name: htpasswdidp-secret
+- command: update
+  path: spec.identityProviders.(name==htpasswdidp)
+
+- command: update
+  path: spec.identityProviders[+]
+  value:
+    name: htpasswdidp
+    type: HTPasswd
+    mappingMethod: claim 
+    htpasswd:
+      fileData:
+        name: htpasswdidp-secret
