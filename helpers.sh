@@ -118,3 +118,23 @@ check_error() {
     exit 1
   fi
 }
+
+function create_project {
+ # wait for project creation
+ local pStatus=$(oc get project $1 -o jsonpath="{.status.phase}" 2>/dev/null)
+ 
+ if [ "$pStatus" != "Active" ]; then
+   oc adm new-project "$1" \
+     --description="Project $1"
+ fi
+
+ pStatus=$(oc get project $1 -o jsonpath="{.status.phase}" 2>/dev/null)
+ 
+ while [ "$pStatus" != "Active" ]
+ do   
+   header_text "\n Waiting for $1 to be created  ...\n"
+   sleep 2
+ done
+
+ echo "$1"
+}

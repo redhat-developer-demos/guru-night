@@ -1,7 +1,7 @@
 apiVersion: maistra.io/v1
 kind: ServiceMeshControlPlane
 metadata:
-  name: basic-install
+  name: auth-install
 spec:
   template: default
   # NOTE, if you remove all children from an element, you should remove the
@@ -10,10 +10,10 @@ spec:
   # the defaults baked into the chart values.yaml).
   istio:
     global:
-      # the following lines disable tls across the control and data planes
-      controlPlaneSecurityEnabled: false
+      # the following lines enable tls across the control and data planes
+      controlPlaneSecurityEnabled: true
       mtls:
-        enabled: false
+        enabled: true
 
       proxy:
         # constrain resources for use in smaller environments

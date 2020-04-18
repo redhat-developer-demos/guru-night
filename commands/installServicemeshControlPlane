@@ -1,0 +1,42 @@
+#!/bin/bash
+
+installServicemeshControlPlane::run() {
+ create_project istio-system
+ local cp_auth=$(readopt -a --auth)
+ local cpName='basic-install'
+ if [ -z $cp_auth ]; then 
+   oc apply -n 'istio-system' -f "$(configdir)/servicemesh/control-plane.yaml"
+ else
+   cpName='auth-install'
+   oc apply -n 'istio-system' -f "$(configdir)/servicemesh/control-plane-auth.yaml"
+ fi 
+ log_waiting "\n Waiting for Control Plane to be Ready \n" 
+ oc wait -n istio-system "smcp/$cpName" --for=condition=Ready --timeout=300s
+ log_success "\n Control Plane successfully deployed \n" 
+}
+
+installServicemeshControlPlane::clean(){
+ local cp_auth=$(readopt -a --auth)
+ local cpName='basic-install'
+ log_waiting "\n Waiting for Control Plane to be Deleted \n"
+ if [ -z $cp_auth ]; then 
+   oc delete -n 'istio-system' -f "$(configdir)/servicemesh/control-plane.yaml"
+ else
+   cpName='auth-install'
+   oc delete -n 'istio-system' -f "$(configdir)/servicemesh/control-plane-auth.yaml"
+ fi  
+ oc wait -n istio-system "smcp/$cpName" --for=delete --timeout=300s 2>/dev/null || true
+ log_success "\n Control Plane deleted successfully \n" 
+ oc delete project istio-system || true
+}
+
+
+installServicemeshControlPlane::usage(){
+    cat <<EOT
+  -a --auth  <yes>  Deploy with mTls enabled
+EOT
+}
+
+installServicemeshControlPlane::description(){
+  echo "Installs Servicemesh Control Plane"
+}

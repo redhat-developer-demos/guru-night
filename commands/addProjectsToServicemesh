@@ -1,34 +1,46 @@
 #!/bin/bash
 
 addProjectsToServicemesh::run(){
-  echo "Creating Istio Service Member Roll"
+  log_waiting "Creating Istio Service Member Roll"
+  bkIFS=IFS
+  local allProjects=$(readopt -a --all-projects)
+  if [ ! -z "$allProjects" ]; 
+  then 
+    IFS=', ' read -r -a projects <<< "$allProjects"
+    for p in "${projects[@]}";
+    do
+      create_project "$p"
+      yq w -i "$(configdir)/istio-service-member-roll.yaml" \
+        'spec.members[+]' "$p"
+    done 
+  else 
+    local projects=$(readopt -p --prefix)
+    if [ -z $projects ]; then 
+      projects=(${PROJECTS:-'tutorial'})
+    fi
 
-  local projects=$(readopt -p --prefix)
-  if [ -z $projects ]; then 
-     projects=(${PROJECTS:-'tutorial'})
+    log_waiting "Adding Projects to Istio Service Member Roll"
+
+    local project_from=$(readopt -f --from)
+    if [ -z $project_from ]; then 
+      project_from=$USERS_FROM
+    fi
+
+    local project_to=$(readopt -t --to)
+    if [ -z $project_to ]; then 
+      project_to=$USERS_TO
+    fi
+    
+    # Add only Istio Tutorial projects to the istio-system-smmr
+    # !!!IMPORTANT !!! Dont add Knative projects to Istio SMMR
+    p='tutorial'
+    for ((i=$project_from; i<=project_to ; i++ ));
+    do
+      yq w -i "$(configdir)/istio-service-member-roll.yaml" \
+        'spec.members[+]' $(printf "$p-%d" $i)
+    done 
+    IFS=bkIFS
   fi
-
-  local projects=${PROJECTS:-(tutorial)};
-  echo "Adding Projects to Istio Service Member Roll"
-
-  local project_from=$(readopt -f --from)
-  if [ -z $project_from ]; then 
-     project_from=$USERS_FROM
-  fi
-
-  local project_to=$(readopt -t --to)
-  if [ -z $project_to ]; then 
-     project_to=$USERS_TO
-  fi
-  
-  # Add only Istio Tutorial projects to the istio-system-smmr
-  # !!!IMPORTANT !!! Dont add Knative projects to Istio SMMR
-  p='tutorial'
-  for ((i=$project_from; i<=project_to ; i++ ));
-  do
-    yq w -i "$(configdir)/istio-service-member-roll.yaml" \
-      'spec.members[+]' $(printf "$p-%d" $i)
-  done 
   
   oc apply -f "$(configdir)/istio-service-member-roll.yaml"
 
@@ -41,6 +53,7 @@ addProjectsToServicemesh::usage(){
   -f --from <project count from>    The starting user count e.g. 1
   -t --to <project count to>        The ending user count e.g. 10
   -p --prefix <project prefix>      The project name prefix e.g tutorial
+  -a --all-projects <comma seperated project names> The all project names that will be added to SMMR
 EOT
 }
 
