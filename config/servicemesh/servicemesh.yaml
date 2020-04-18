@@ -5,7 +5,7 @@ metadata:
   name: servicemesh
   namespace: openshift-operators
 spec:
-  channel: "1.0"
+  channel: stable
   source: redhat-operators-packages
   name: servicemeshoperator 
   sourceNamespace: openshift-operators

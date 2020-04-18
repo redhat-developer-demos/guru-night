@@ -1,3 +1,82 @@
+BLACK='\e[1;30m'        # Black
+RED='\e[0;31m'          # Red
+GREEN='\e[1;32m'        # Green
+YELLOW='\e[1;33m'       # Yellow
+header_color="$YELLOW"
+reset=$'\e[0m'
+
+NO_COLOR=${NO_COLOR:-""}
+
+if [ -z "$NO_COLOR" ]; then
+  header_color="$BLACK"
+  reset=$'\e[0m'
+else
+  header=''
+  reset=''
+fi
+
+function header_text {
+  printf "$header_color$*$reset"
+}
+
+function log_waiting {
+  printf "$YELLOW$*$reset"
+}
+
+function log_error {
+  printf "$RED$*$reset"
+}
+
+function log_success {
+  printf "$GREEN$*$reset"
+}
+
+function csv_status {
+ local timeout=30
+ header_color="$YELLOW"
+ header_text "Checking status of subscription : '$1'"
+ local csv=$(kubectl get subscriptions -n openshift-operators \
+   $1 -ojsonpath="{.status.installedCSV}")
+ local csvStatus=$(kubectl get csv -n openshift-operators "${csv}" \
+   -ojsonpath="{.status.phase}" 2>/dev/null)
+ 
+ if $(hasflag --verbose -v); then
+   header_text "Status of $csv : '$csvStatus'"
+ fi
+
+ # make sure the csv has value
+ while [ -z "$csv" ];
+ do
+  log_waiting "\n Waiting for '$1' CSV ...\n"
+  csv=$(kubectl get subscriptions -n openshift-operators \
+   "${1}" -ojsonpath="{.status.installedCSV}")
+ done
+
+ local cmd_time=5
+ while [ "$csvStatus" != "Succeeded" ];
+ do   
+   log_waiting "\n Waiting for '$1' to be installed and ready ...\n"
+   
+   sleep 5
+   ((cmd_time+=5))
+
+   csvStatus=$(kubectl get csv -n openshift-operators $csv \
+   -ojsonpath="{.status.phase}" 2>/dev/null)
+
+   if $(hasflag --verbose -v); then
+     log_waiting "Current Status of $1 : $csvStatus"
+   fi
+
+   if [[ "$csvStatus" != "Succeeded" && $cmd_time -ge $timeout ]];
+   then
+    log_error "\n[ERR] Timed out waiting for '$1' to be installed and ready \n"
+    exit 1;
+   fi
+ done
+
+ return 0
+}
+
 # Checks if a flag is present in the arguments.
 hasflag() {
   local flags="$@"

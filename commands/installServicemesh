@@ -1,14 +1,29 @@
 #!/bin/bash
 
 installServicemesh::run() {
- oc apply -f "$(configdir)/servicemesh/elasticsearch.yaml" 
- oc apply -f "$(configdir)/servicemesh/jaeger.yaml" 
- oc apply -f "$(configdir)/servicemesh/kiali.yaml" 
- oc apply -f "$(configdir)/servicemesh/servicemesh.yaml" 
+ kubectl apply -f "$(configdir)/servicemesh/elasticsearch.yaml" 
+ csv_status 'elastic-search'
+ log_success "\n Elasticsearch successfully installed \n"
+ kubectl apply -f "$(configdir)/servicemesh/jaeger.yaml" 
+ csv_status 'jaeger'
+ log_success "\n Jaeger successfully installed \n"
+ kubectl apply -f "$(configdir)/servicemesh/kiali.yaml" 
+ csv_status 'kiali'
+ log_success "\n Kiali successfully installed \n"
+ kubectl apply -f "$(configdir)/servicemesh/servicemesh.yaml" 
+ csv_status 'servicemesh'
+ log_success "\n Servicemesh successfully installed \n"
 }
 
 installServicemesh::clean() {
-  echo "WIP"
+  kubectl delete -f "$(configdir)/servicemesh/servicemesh.yaml" || true
+  log_success "\n Servicemesh deleted successfully \n"
+  kubectl delete -f "$(configdir)/servicemesh/kiali.yaml"  || true
+  log_success "\n Kiali deleted successfully \n"
+  kubectl delete -f "$(configdir)/servicemesh/jaeger.yaml"  || true
+  log_success "\n Jaeger deleted successfully \n"
+  kubectl delete -f "$(configdir)/servicemesh/elasticsearch.yaml"  || true
+  log_success "\n Servicemesh deleted successfully \n"
 }
 
 installServicemesh::usage(){
