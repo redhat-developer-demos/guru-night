@@ -20,12 +20,15 @@ export OPENSHIFT_DOMAIN_SUFFIX=''
 export WORKSHOP_USER_DEFAULT_PASSWORD=''
 
 ### START CHE SETTINGS
-# The Che URL
-export CHE_URL="http://$(oc get routes -n che che -o yaml | yq r - 'spec.host')"
-# The Che Keycloak URL
-export CHE_KEYCLOAK_URL="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
-# The DEVFILE to use for workshop, it could be relative path or raw github path
-export WORKSHOP_DEVFILE_URL=''
+if [ $(kubectl get ns che &>/dev/null) ];
+then   
+ # The Che URL
+ export CHE_URL="http://$(oc get routes -n che che -o yaml | yq r - 'spec.host')"
+ # The Che Keycloak URL
+ export CHE_KEYCLOAK_URL="http://$(oc get routes -n che keycloak -o yaml | yq r - 'spec.host')"
+ # The DEVFILE to use for workshop, it could be relative path or raw github path
+ export WORKSHOP_DEVFILE_URL=''
+fi
 ### END CHE SETTINGS
 
 ### START USER COUNT

@@ -1,12 +1,22 @@
 #!/bin/bash
 
 installKnativeEventing::run() {
-! oc adm new-project knative-eventing
- oc apply -f "$(configdir)/knative-eventing/subscription.yaml" 
+ create_project knative-eventing
+ kubectl apply -f "$(configdir)/knative-eventing/subscription.yaml" 
+ csv_status 'knative-eventing'
+ log_success "\n Knative Eventing successfully installed \n"
+ log_waiting "\n Waiting for Knative Eventing to be Ready \n" 
+ kubectl wait -n knative-eventing KnativeEventing.eventing.knative.dev/knative-eventing --for=condition=Ready --timeout=300s
+ log_success "\n Knative Eventing successfully deployed \n" 
 }
 
 installKnativeEventing::clean() {
-  echo "WIP"
+  kubectl delete -n knative-eventing KnativeEventing.eventing.knative.dev/knative-eventing
+  kubectl wait -n knative-eventing KnativeEventing.eventing.knative.dev/knative-eventing --for=delete --timeout=300s 2>/dev/null || true
+  log_success "\n  Knative Eventing deleted successfully \n" 
+  csv_delete 'knative-eventing'
+  kubectl delete -f "$(configdir)/knative-eventing/subscription.yaml" 
+  log_success "\n Knative Eventing successfully unsubcribed \n"
 }
 
 installKnativeEventing::usage(){

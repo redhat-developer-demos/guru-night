@@ -1,7 +1,9 @@
 #!/bin/bash
 
 installKamel::run() {
- oc apply -f "$(configdir)/kamel/subscription.yaml" 
+ kubectl apply -f "$(configdir)/kamel/subscription.yaml" 
+ csv_status 'camel-k'
+ log_success "\n Apache Camel-K (kamel) successfully installed \n"
 }
 
 installKamel::usage(){
@@ -9,9 +11,11 @@ installKamel::usage(){
 }
 
 installKamel::clean(){
-  echo "WIP"
+  csv_delete 'camel-k'
+  kubectl delete -f "$(configdir)/kamel/subscription.yaml" 
+  log_success "\n Apache Camel-K (kamel) successfully unsubcribed \n"
 }
 
 installKamel::description(){
-  echo "Install Eclipse Che via Operator"
+  echo "Install Apache Camel-K via Operator"
 }

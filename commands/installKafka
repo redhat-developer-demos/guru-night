@@ -1,14 +1,22 @@
 #!/bin/bash
 
 installKafka::run() {
- ! oc adm new-project kafka
- oc apply -f "$(configdir)/kafka/subscription.yaml" 
- sleep 60
- oc apply -f "$(configdir)/kafka/cr.yaml"
+ create_project kafka
+ kubectl apply -f "$(configdir)/kafka/subscription.yaml"
+ csv_status 'strimzi-kafka'
+ log_success "\n Strimzi Kafka successfully installed \n"
+ kubectl apply -f "$(configdir)/kafka/cr.yaml"
+ log_waiting "\n Waiting for Kafka to be Ready \n" 
+ kubectl wait -n kafka Kafka.kafka.strimzi.io/my-cluster --for=condition=Ready --timeout=300s
+ log_success "\n Kafka successfully deployed \n" 
 }
 
 installKafka::clean() {
-  echo "WIP"
+  kubectl delete -n kafka Kafka.kafka.strimzi.io/my-cluster
+  kubectl wait -n kafka Kafka.kafka.strimzi.io/my-cluster --for=condition=Ready --timeout=300s 2>/dev/null || true
+  log_success "\n Strimzi Kafka deleted successfully \n" 
+  kubectl delete -f "$(configdir)/kafka/subscription.yaml"
+  log_success "\n Strimzi Kafka successfully unsubcribed \n"
 }
 
 installKafka::usage(){

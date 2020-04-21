@@ -1,10 +1,14 @@
 #!/bin/bash
 
 installKnativeServing::run() {
- ! oc adm new-project knative-serving
- oc apply -f "$(configdir)/knative-serving/subscription.yaml" 
- sleep 120
- oc apply -f "$(configdir)/knative-serving/cr.yaml"
+ create_project knative-serving
+ kubectl apply -f "$(configdir)/knative-serving/subscription.yaml" 
+ csv_status 'knative-serving'
+ log_success "\n Knative Serving successfully installed \n"
+ kubectl apply -f "$(configdir)/knative-serving/cr.yaml"
+ log_waiting "\n Waiting for Knative Serving to be Ready \n" 
+ kubectl wait -n knative-serving KnativeServing.operator.knative.dev/knative-serving --for=condition=Ready --timeout=300s
+ log_success "\n Knative Serving successfully deployed \n" 
 }
 
 installKnativeServing::usage(){
@@ -12,7 +16,12 @@ installKnativeServing::usage(){
 }
 
 installKnativeServing::clean() {
-  echo "WIP"
+  kubectl delete -n knative-serving KnativeServing.operator.knative.dev/knative-serving
+  kubectl wait -n knative-serving KnativeServing.operator.knative.dev/knative-serving --for=delete --timeout=300s 2>/dev/null || true
+  log_success "\n Knative Serving deleted successfully \n" 
+  csv_delete 'knative-serving'
+  kubectl delete -f "$(configdir)/knative-serving/subscription.yaml" 
+  log_success "\n Knative Serving successfully unsubcribed \n"
 }
 
 installKnativeServing::description(){

@@ -1,7 +1,9 @@
 #!/bin/bash
 
 installKnativeCamel::run() {
- oc apply -f "$(configdir)/knative-camel/subscription.yaml" 
+ kubectl apply -f "$(configdir)/knative-camel/subscription.yaml" 
+ csv_status 'knative-camel'
+ log_success "\n Knative Eventing Camel successfully installed \n"
 }
 
 installKnativeCamel::usage(){
@@ -9,7 +11,9 @@ installKnativeCamel::usage(){
 }
 
 installKnativeCamel::clean(){
-  echo "WIP"
+ csv_delete 'knative-camel'
+ kubectl delete -f "$(configdir)/knative-camel/subscription.yaml" 
+ log_success "\n  Knative Eventing Camel unsubcribed \n" 
 }
 
 installKnativeCamel::description(){

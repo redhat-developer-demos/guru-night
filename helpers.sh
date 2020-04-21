@@ -31,8 +31,31 @@ function log_success {
   printf "$GREEN$*$reset"
 }
 
+function csv_delete {
+ local timeout=60
+ header_color="$YELLOW"
+ header_text "Deleteing CSV for Subscription : '$1'"
+ local csv=$(kubectl get subscriptions -n openshift-operators \
+   $1 -ojsonpath="{.status.installedCSV}")
+ local csvStatus=$(kubectl get csv -n openshift-operators "${csv}" \
+   -ojsonpath="{.status.phase}" 2>/dev/null)
+ 
+ if $(hasflag --verbose -v); then
+   header_text "Status of $csv : '$csvStatus'"
+ fi
+
+ # make sure the csv has value
+ while [ -z "$csv" ];
+ do
+  log_waiting "\n Retrieving CSV for '$1' \n"
+  csv=$(kubectl get subscriptions -n openshift-operators \
+   "${1}" -ojsonpath="{.status.installedCSV}")
+ done
+ kubectl delete csv -n openshift-operators "$csv"
+}
+
 function csv_status {
- local timeout=30
+ local timeout=60
  header_color="$YELLOW"
  header_text "Checking status of subscription : '$1'"
  local csv=$(kubectl get subscriptions -n openshift-operators \

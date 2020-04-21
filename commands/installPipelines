@@ -1,7 +1,9 @@
 #!/bin/bash
 
 installPipelines::run() {
- oc apply -f "$(configdir)/pipelines/subscription.yaml" 
+ kubectl apply -f "$(configdir)/pipelines/subscription.yaml" 
+ csv_status 'openshift-pipelines'
+ log_success "\n OpenShift Pipelines successfully installed \n"
 }
 
 installPipelines::usage(){
@@ -9,7 +11,9 @@ installPipelines::usage(){
 }
 
 installPipelines::clean(){
-  echo "WIP"
+  csv_delete 'openshift-pipelines'
+  kubectl delete -f "$(configdir)/pipelines/subscription.yaml" 
+  log_success "\n OpenShift Pipelines successfully unsubscribed \n"
 }
 
 installPipelines::description(){

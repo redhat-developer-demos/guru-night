@@ -5,7 +5,7 @@ metadata:
   name: knative-serving
   namespace: openshift-operators
 spec:
-  channel: techpreview
+  channel: preview-4.3
   source: redhat-operators-packages
   name: serverless-operator
   sourceNamespace: openshift-operators

@@ -1,13 +1,22 @@
 #!/bin/bash
 
 installKnativeKafka::run() {
- oc apply -f "$(configdir)/knative-eventing-kafka/subscription.yaml" 
- sleep 60
- oc apply -f "$(configdir)/knative-eventing-kafka/cr.yaml" 
+ kubectl apply -f "$(configdir)/knative-eventing-kafka/subscription.yaml" 
+ csv_status 'knative-kafka'
+ log_success "\n Knative Eventing Kafka successfully installed \n"
+ log_waiting "\n Waiting Knative Eventing Kafka to be Ready \n" 
+ kubectl apply -f "$(configdir)/knative-eventing-kafka/cr.yaml" 
+ kubectl wait -n knative-eventing KnativeEventingKafka.eventing.knative.dev/knative-eventing-kafka --for=condition=Ready --timeout=300s
+ log_success "\n Knative Eventing Kafka successfully deployed \n" 
 }
 
 installKnativeKafka::clean() {
-  echo "WIP"
+  kubectl delete -n knative-eventing KnativeEventingKafka.eventing.knative.dev/knative-eventing-kafka
+  kubectl wait -n knative-eventing KnativeEventingKafka.eventing.knative.dev/knative-eventing-kafka --for=delete --timeout=300s 2>/dev/null || true
+  log_success "\n  Knative Eventing Kafka deleted successfully \n" 
+  csv_delete 'knative-kafka'
+  kubectl delete -f "$(configdir)/knative-eventing-kafka/subscription.yaml"
+  log_success "\n Knative Eventing Kafka successfully unsubcribed \n" 
 }
 
 installKnativeKafka::usage(){
