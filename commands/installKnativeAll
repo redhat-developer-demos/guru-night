@@ -1,0 +1,35 @@
+#!/bin/bash
+
+installKnativeAll::run() {
+ local cmd_dir="$(basedir)/commands"
+ local config_dir="$(basedir)/config"
+
+ local commands=("installCatalogSources" "installKnativeServing" "installKnativeEventing" "installKafka" "installKnativeKafka" "installKnativeCamel")
+ 
+ for command in "${commands[@]}"
+ do
+     source "$cmd_dir/$command"
+     eval "${command}::run"
+ done
+}
+
+installKnativeAll::clean() {
+ local cmd_dir="$(basedir)/commands"
+ local config_dir="$(basedir)/config"
+
+ local commands=("installCatalogSources" "installKnativeServing" "installKnativeEventing" "installKafka" "installKnativeKafka" "installKnativeCamel")
+ 
+ for command in "${commands[@]}"
+ do
+     source "$cmd_dir/$command"
+     eval "${command}::clean"
+ done
+}
+
+installKnativeAll::usage(){
+  echo "No parameters"
+}
+
+installKnativeAll::description(){
+  echo "Install all Knative Components Serving and Eventing with Apache Kafka and Camel-K"
+}
