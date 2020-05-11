@@ -1,0 +1,17 @@
+#!/bin/bash
+
+crcDefaultStorage::run() {
+ oc apply -f "$(configdir)/hostpathprovisioner/provisioner.yaml" 
+}
+
+crcDefaultStorage::usage(){
+  echo "No parameters"
+}
+
+crcDefaultStorage::clean(){
+  oc delete -f "$(configdir)/hostpathprovisioner/provisioner.yaml" 
+}
+
+crcDefaultStorage::description(){
+  echo "Configure default storage class for CRC"
+}

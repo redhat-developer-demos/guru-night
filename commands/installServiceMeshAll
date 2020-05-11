@@ -1,10 +1,10 @@
 #!/bin/bash
 
-installKnativeAll::run() {
+installServicemeshAll::run() {
  local cmd_dir="$(basedir)/commands"
  local config_dir="$(basedir)/config"
 
- local commands=("installCatalogSources" "installServiceMesh" "instalServicemeshControlPlane")
+ local commands=("installCatalogSources" "installServicemesh" "installServicemeshControlPlane")
  
  for command in "${commands[@]}"
  do
@@ -13,11 +13,11 @@ installKnativeAll::run() {
  done
 }
 
-installKnativeAll::clean() {
+installServicemeshAll::clean() {
  local cmd_dir="$(basedir)/commands"
  local config_dir="$(basedir)/config"
 
- local commands=("installCatalogSources" "installServiceMesh" "instalServicemeshControlPlane")
+ local commands=("installCatalogSources" "installServicemesh" "installServicemeshControlPlane")
  
  for command in "${commands[@]}"
  do
@@ -26,10 +26,10 @@ installKnativeAll::clean() {
  done
 }
 
-installKnativeAll::usage(){
+installServicemeshAll::usage(){
   echo "No parameters"
 }
 
-installKnativeAll::description(){
-  echo "Install all Knative Components Serving and Eventing with Apache Kafka and Camel-K"
+installServicemeshAll::description(){
+  echo "Install all  Servicemesh Components"
 }
