@@ -7,7 +7,7 @@ export CONFIGS_DIR="$_CURR_DIR/../config"
 export WORK_DIR="$_CURR_DIR/../work"
 
 # set kubeconfig file to allow system:admin login 
-export KUBECONFIG=''
+export KUBECONFIG=${KUBECONFIG:-''}
 # Openshift user with cluster admin role
 export OPENSHIFT_ADMIN_USER=''
 # Openshift cluster admin user password
