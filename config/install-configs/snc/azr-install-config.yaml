@@ -1,0 +1,33 @@
+apiVersion: v1
+baseDomain: # your base domain name
+compute:
+  - hyperthreading: Enabled
+    name: worker
+    replicas: 0
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  platform:
+    azure:
+      # 32 cpu 128 gb
+      type: 'Standard_D32s_v3'
+      osDisk:
+        diskSizeGB: 300
+        diskType: Standard_LRS
+  replicas: 1
+metadata:
+  name: # your unique cluster name
+networking:
+  clusterNetwork:
+    - cidr: 10.128.0.0/14
+      hostPrefix: 23
+  machineCIDR: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+    - 172.30.0.0/16
+platform:
+  azure:
+    baseDomainResourceGroupName: # you resource which has public dns zone configured
+    region: # az account list-locations
+pullSecret: #to be updated
+sshKey: #to be updated

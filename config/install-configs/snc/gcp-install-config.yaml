@@ -1,0 +1,40 @@
+apiVersion: v1
+baseDomain: # your base domain
+compute:
+  - hyperthreading: Enabled
+    name: worker
+    replicas: 0
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  platform:
+    gcp:
+      # 32 vCpu 64 GB
+      type: 'n1-standard-32'
+      # update it to the zones you need to be available
+      # gcloud compute zones list
+      # zones:
+      #   - asia-south1-b
+      #   - asia-south1-b
+      # Default machine types gives 128GB if you need more increase
+      # the PD disk size
+      # osDisk:
+      #   diskType: pd-ssd
+      #   diskSizeGB: 375
+  replicas: 1
+metadata:
+  name: # unique cluster name
+networking:
+  clusterNetwork:
+    - cidr: 10.128.0.0/14
+      hostPrefix: 23
+  machineCIDR: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+    - 172.30.0.0/16
+platform:
+  gcp:
+    projectID: # your gcp project id
+    region: # gcloud compute regions list
+pullSecret: # update your pull secret
+sshKey: # update your ssh key

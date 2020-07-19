@@ -1,0 +1,37 @@
+apiVersion: v1
+baseDomain: # base domain
+compute:
+  - hyperthreading: Enabled
+    name: worker
+    replicas: 0
+controlPlane:
+  hyperthreading: Enabled
+  name: master
+  platform:
+    aws:
+      # 32 vCPU and 64G
+      type: m5a.8xlarge
+      rootVolume:
+        size: 300
+        type: gp2
+      # aws avbl zones
+      #  zones:
+      #    - ap-south-1a
+      #    - ap-south-1b
+  replicas: 1
+metadata:
+  name: # unique cluster name
+networking:
+  clusterNetwork:
+    - cidr: 10.128.0.0/14
+      hostPrefix: 23
+  machineCIDR: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+    - 172.30.0.0/16
+platform:
+  aws:
+    region: # aws regions list
+# update these to match your environment
+# pullSecret:
+# sshKey: |
