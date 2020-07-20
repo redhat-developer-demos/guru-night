@@ -9,15 +9,13 @@ controlPlane:
   name: master
   platform:
     aws:
-      # 32 vCPU and 64G
-      type: m5a.8xlarge
-      rootVolume:
-        size: 300
-        type: gp2
+      # 16 vCPU and 64G
+      type: m4.4xlarge
+      # rootVolume:
+      #   size: 300
+      #   type: gp2
       # aws avbl zones
-      #  zones:
-      #    - ap-south-1a
-      #    - ap-south-1b
+      #  zones: []
   replicas: 1
 metadata:
   name: # unique cluster name
@@ -32,6 +30,6 @@ networking:
 platform:
   aws:
     region: # aws regions list
-# update these to match your environment
-# pullSecret:
-# sshKey: |
+pullSecret: '{"auths":{"fake":{"auth":"bar"}}}'
+# Optional
+# sshKey: # update your ssh key

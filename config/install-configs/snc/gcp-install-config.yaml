@@ -9,13 +9,11 @@ controlPlane:
   name: master
   platform:
     gcp:
-      # 32 vCpu 64 GB
-      type: 'n1-standard-32'
+      # 16 vCpu 64 GB
+      type: 'n1-standard-16'
       # update it to the zones you need to be available
       # gcloud compute zones list
-      # zones:
-      #   - asia-south1-b
-      #   - asia-south1-b
+      # zones: []
       # Default machine types gives 128GB if you need more increase
       # the PD disk size
       # osDisk:
@@ -36,5 +34,6 @@ platform:
   gcp:
     projectID: # your gcp project id
     region: # gcloud compute regions list
-pullSecret: # update your pull secret
-sshKey: # update your ssh key
+pullSecret: '{"auths":{"fake":{"auth":"bar"}}}'
+# Optional
+# sshKey: # update your ssh key
